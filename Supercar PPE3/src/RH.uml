@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_RzxqcJ4MEeuLho7ErCHAZA" name="RH">
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_R1044J4MEeuLho7ErCHAZA">
+    <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
+  </packageImport>
+  <packageImport xmi:type="uml:PackageImport" xmi:id="_cjGT4J4MEeuLho7ErCHAZA">
+    <importedPackage xmi:type="uml:Profile" href="pathmap://PapyrusJava_PROFILES/PapyrusJava.profile.uml#_j9REUByGEduN1bTiWJ0lyw"/>
+  </packageImport>
+  <packagedElement xmi:type="uml:Class" xmi:id="_g1KmAJ4MEeuLho7ErCHAZA" name="Employee">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_oRzWsJ4MEeuLho7ErCHAZA" name="id_emp" visibility="private">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_q8mJAJ4MEeuLho7ErCHAZA" name="civilite">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_rdaXEJ4MEeuLho7ErCHAZA" name="nom">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_rzqT4J4MEeuLho7ErCHAZA" name="prenom">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_sFmYcJ4MEeuLho7ErCHAZA" name="age">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_sWbpwJ4MEeuLho7ErCHAZA" name="telephone">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_snVMgJ4MEeuLho7ErCHAZA" name="adresse">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_s6ziIJ4MEeuLho7ErCHAZA" name="email">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_tMcrwJ4MEeuLho7ErCHAZA" name="license">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_uAG9UJ4MEeuLho7ErCHAZA" name="compte_bancaire">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_uYBuEJ4MEeuLho7ErCHAZA" name="numero_id">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_uqCrIJ4MEeuLho7ErCHAZA" name="salaire">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#float"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vStNoJ4MEeuLho7ErCHAZA" name="poste">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_vx_xsJ4MEeuLho7ErCHAZA" name="departement">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_VfsQoJ4OEeuLho7ErCHAZA" name="departement" type="_hMcdkJ4MEeuLho7ErCHAZA" association="_VfZ8wJ4OEeuLho7ErCHAZA">
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Vfs3sZ4OEeuLho7ErCHAZA" value="*"/>
+    </ownedAttribute>
+    <ownedOperation xmi:type="uml:Operation" xmi:id="_-tMlsJ4MEeuLho7ErCHAZA" name="calcul_salaire" visibility="private"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_hMcdkJ4MEeuLho7ErCHAZA" name="Departement">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_AGJ8sJ4NEeuLho7ErCHAZA" name="id_dept" visibility="private">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_B45ssJ4NEeuLho7ErCHAZA" name="nom_dept">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_CWXEwJ4NEeuLho7ErCHAZA" name="adresse_dept">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_VfZ8wJ4OEeuLho7ErCHAZA" memberEnd="_VfsQoJ4OEeuLho7ErCHAZA _Vfs3sp4OEeuLho7ErCHAZA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_VfrCgJ4OEeuLho7ErCHAZA" source="org.eclipse.papyrus">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_VfrpkJ4OEeuLho7ErCHAZA" key="nature" value="UML_Nature"/>
+    </eAnnotations>
+    <ownedEnd xmi:type="uml:Property" xmi:id="_Vfs3sp4OEeuLho7ErCHAZA" name="employee" type="_g1KmAJ4MEeuLho7ErCHAZA" association="_VfZ8wJ4OEeuLho7ErCHAZA"/>
+  </packagedElement>
+</uml:Model>
