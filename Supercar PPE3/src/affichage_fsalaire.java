@@ -1,7 +1,6 @@
 import java.awt.EventQueue;
 import java.sql.*;
 
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -9,7 +8,6 @@ import javax.swing.JTable;
 
 import java.awt.Font;
 import net.proteanit.sql.DbUtils;
-
 
 public class affichage_fsalaire {
 
@@ -19,7 +17,7 @@ public class affichage_fsalaire {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void ficheSalaire() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -84,7 +82,7 @@ public class affichage_fsalaire {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1206, 591);
+		frame.setBounds(100, 100, 1288, 593);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -94,7 +92,7 @@ public class affichage_fsalaire {
 		frame.getContentPane().add(lblNewLabel);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 77, 1166, 370);
+		scrollPane.setBounds(10, 77, 1248, 439);
 		frame.getContentPane().add(scrollPane);
 		
 		table = new JTable();

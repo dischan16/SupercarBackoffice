@@ -118,13 +118,13 @@ public class fiche_salaire {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Fiche Salaire");
-		lblNewLabel.setBounds(546, -14, 245, 79);
+		JLabel lblNewLabel = new JLabel("FICHE SALAIRE");
+		lblNewLabel.setBounds(664, -11, 290, 79);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 35));
 		frame.getContentPane().add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(11, 123, 411, 673);
+		panel.setBounds(11, 134, 411, 682);
 		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "fiche_salaire", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
@@ -210,7 +210,7 @@ public class fiche_salaire {
 		panel.add(lblDepartement);
 		
 		JButton btnExit = new JButton("Sortir");
-		btnExit.setBounds(805, 716, 107, 50);
+		btnExit.setBounds(975, 766, 107, 50);
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
@@ -219,7 +219,7 @@ public class fiche_salaire {
 		frame.getContentPane().add(btnExit);
 		
 		JButton btnClear = new JButton("Effacer");
-		btnClear.setBounds(623, 716, 107, 50);
+		btnClear.setBounds(799, 766, 107, 50);
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtnom.setText("");
@@ -236,14 +236,14 @@ public class fiche_salaire {
 		frame.getContentPane().add(btnClear);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(447, 134, 1114, 528);
+		scrollPane.setBounds(447, 142, 1114, 611);
 		frame.getContentPane().add(scrollPane);
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
 			
 		JButton btnsalaire = new JButton("PDF Salaire");
-		btnsalaire.setBounds(447, 716, 107, 50);
+		btnsalaire.setBounds(447, 766, 107, 50);
 		btnsalaire.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -312,15 +312,15 @@ public class fiche_salaire {
 						
 						myDoc.add(new Paragraph(" ", FontFactory.getFont(FontFactory.HELVETICA,20)));
 						
-						myDoc.add(new Paragraph("Detail de l'employé", FontFactory.getFont(FontFactory.HELVETICA,20)));
-						myDoc.add(new Paragraph("Nom: "+nom+ " ", FontFactory.getFont(FontFactory.HELVETICA,20)));
-						myDoc.add(new Paragraph("Prenom: "+prenom+" ", FontFactory.getFont(FontFactory.HELVETICA,20)));
-						myDoc.add(new Paragraph("Email: "+email+" ", FontFactory.getFont(FontFactory.HELVETICA,20)));
-						myDoc.add(new Paragraph("Numéro carte d'identité: "+numero_id+" ", FontFactory.getFont(FontFactory.HELVETICA,20)));
-						myDoc.add(new Paragraph("Nombre compte bancaire: "+compte_bancaire+" ", FontFactory.getFont(FontFactory.HELVETICA,20)));
-						myDoc.add(new Paragraph("Salaire: "+salaire+" ", FontFactory.getFont(FontFactory.HELVETICA,20)));
-						myDoc.add(new Paragraph("Poste: "+poste+" ", FontFactory.getFont(FontFactory.HELVETICA,20)));
-						myDoc.add(new Paragraph("Departement: "+departement+" ", FontFactory.getFont(FontFactory.HELVETICA,20)));
+						myDoc.add(new Paragraph("Detail de l'employé", FontFactory.getFont(FontFactory.HELVETICA,15)));
+						myDoc.add(new Paragraph("Nom: "+nom+ " ", FontFactory.getFont(FontFactory.HELVETICA,15)));
+						myDoc.add(new Paragraph("Prenom: "+prenom+" ", FontFactory.getFont(FontFactory.HELVETICA,15)));
+						myDoc.add(new Paragraph("Email: "+email+" ", FontFactory.getFont(FontFactory.HELVETICA,15)));
+						myDoc.add(new Paragraph("Numéro carte d'identité: "+numero_id+" ", FontFactory.getFont(FontFactory.HELVETICA,15)));
+						myDoc.add(new Paragraph("Nombre compte bancaire: "+compte_bancaire+" ", FontFactory.getFont(FontFactory.HELVETICA,15)));
+						myDoc.add(new Paragraph("Salaire: "+salaire+" ", FontFactory.getFont(FontFactory.HELVETICA,15)));
+						myDoc.add(new Paragraph("Poste: "+poste+" ", FontFactory.getFont(FontFactory.HELVETICA,15)));
+						myDoc.add(new Paragraph("Departement: "+departement+" ", FontFactory.getFont(FontFactory.HELVETICA,15)));
 					
 						myDoc.close();
 						JOptionPane.showMessageDialog(null, "PDF Valider");
@@ -358,7 +358,7 @@ public class fiche_salaire {
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
 		panel_1.setBorder(new TitledBorder(null, "Search", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_1.setBounds(11, 41, 1067, 69);
+		panel_1.setBounds(11, 53, 1550, 69);
 		frame.getContentPane().add(panel_1);
 		
 		JLabel label = new JLabel("id_emp");
@@ -427,7 +427,20 @@ public class fiche_salaire {
 			}
 		});
 		textField.setColumns(10);
-		textField.setBounds(121, 22, 884, 22);
+		textField.setBounds(121, 22, 1087, 22);
 		panel_1.add(textField);
+		
+		JButton btnaffichagesalaire = new JButton("Affichage Salaire");
+		btnaffichagesalaire.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
+			public void actionPerformed(ActionEvent arg0) {
+				
+				affichage_fsalaire fsalaire = new affichage_fsalaire();
+				fsalaire.ficheSalaire();
+						
+			}
+		});
+		btnaffichagesalaire.setBounds(612, 766, 136, 50);
+		frame.getContentPane().add(btnaffichagesalaire);
 			}
 }
