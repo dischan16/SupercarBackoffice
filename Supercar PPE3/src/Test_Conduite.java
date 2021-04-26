@@ -1,5 +1,6 @@
 import java.awt.EventQueue;
 import java.sql.*;
+import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,7 +21,6 @@ import javax.swing.JScrollPane;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JComboBox;
-import javax.swing.JRadioButton;
 
 public class Test_Conduite {                
 
@@ -62,8 +62,6 @@ public class Test_Conduite {
 	private JTextField txtemail;
 	private JTextField textvoiture;
 	private JTextField textdate;
-	private JRadioButton rdmonsieur_1;
-	private JRadioButton rdmadame_1;
 	 
 	 public void Connect()
 	    {
@@ -102,17 +100,17 @@ public class Test_Conduite {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1384, 893);
+		frame.setBounds(100, 100, 1393, 810);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Test Conduite");
-		lblNewLabel.setBounds(497, -14, 243, 79);
+		lblNewLabel.setBounds(556, -12, 243, 79);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 35));
 		frame.getContentPane().add(lblNewLabel);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(12, 168, 411, 509);
+		panel.setBounds(12, 168, 411, 475);
 		panel.setBorder(new TitledBorder(null, "Registration", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
@@ -189,7 +187,6 @@ public class Test_Conduite {
 		panel.add(lbletat);
 		
 		JComboBox dropetat = new JComboBox();
-		dropetat.setEditable(true);
 		dropetat.setBounds(160, 397, 211, 26);
 		panel.add(dropetat);
 		
@@ -199,54 +196,25 @@ public class Test_Conduite {
 		
 		dropetat.setSelectedItem("Selecter Etat");
 		
-		rdmonsieur_1 = new JRadioButton("Monsieur");
-		rdmonsieur_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				if(rdmonsieur_1.isSelected()) {
-					rdmadame_1.setSelected(false);
-				}
-			}
-		});
-		rdmonsieur_1.setBounds(158, 48, 81, 25);
-		panel.add(rdmonsieur_1);
+		JComboBox dropcivil = new JComboBox();
+		dropcivil.setBounds(160, 47, 211, 26);
+		panel.add(dropcivil);
 		
-		rdmadame_1 = new JRadioButton("Madame");
-		rdmadame_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				if(rdmadame_1.isSelected()) {
-					rdmonsieur_1.setSelected(false);
-				}
-			}
-		});
-		rdmadame_1.setBounds(270, 48, 81, 25);
-		panel.add(rdmadame_1);
+		dropcivil.addItem(" ");
+		dropcivil.addItem("Monsieur");
+		dropcivil.addItem("Madame");
+		
+		
 		
 		JButton btnNewButton = new JButton("Sauvegarder");
-		btnNewButton.setBounds(12, 690, 107, 50);
+		btnNewButton.setBounds(51, 679, 135, 50);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{			
-				String civilite = null,nom,prenom,telephone,email,voiture,date;
-				Object etat;
+				String nom,prenom,telephone,email,voiture,date;
+				Object civilite,etat;
 			
-				if(rdmonsieur_1.isSelected()) {
-					civilite = "Monsieur";
-				}
-				
-				if(rdmadame_1.isSelected()) {
-					civilite = "Madame";
-				}
-				
-				if (civilite.equals("Monsieur")) {
-					rdmonsieur_1.setSelected(true);
-				}
-				else {
-					rdmadame_1.setSelected(true);
-				}
-			
-				
+				civilite = dropcivil.getSelectedItem();
 				nom = txtnom.getText();
 				prenom = txtprenom.getText();
 				telephone = txttelephone.getText();
@@ -256,8 +224,64 @@ public class Test_Conduite {
 				etat = dropetat.getSelectedItem();
 							
 				 try {
+					 
+					 
+					 final String NOM_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
+					 
+					 final Pattern NOM_PATTERN = Pattern.compile(NOM_REGEX);
+					 
+					 final String PRENOM_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
+					 
+					 final Pattern PRENOM_PATTERN = Pattern.compile(PRENOM_REGEX);
+					 
+					 final String TELEPHONE_REGEX = "^[0-9]{8}$";
+					 
+					 final Pattern TELEPHONE_PATTERN = Pattern.compile(TELEPHONE_REGEX);
+					 
+					 final String EMAIL_REGEX = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$";
+					 
+					 final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
+					 
+					 final String VOITURE_REGEX = "^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z][0-9]*)*$";
+					 
+					 final Pattern VOITURE_PATTERN = Pattern.compile(VOITURE_REGEX);
+					 
+					 final String DATE_REGEX = "^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d$";
+					 
+					 final Pattern DATE_PATTERN = Pattern.compile(DATE_REGEX);
+					 
+					 if (NOM_PATTERN.matcher(nom).matches() == false) {
+					    	JOptionPane.showMessageDialog(null, "L`insertion du nom n`est pas bon");
+					 }
+					 
+					 if (PRENOM_PATTERN.matcher(prenom).matches() == false) {
+					    	JOptionPane.showMessageDialog(null, "L`insertion du prenom n`est pas bon");
+					 }
+					 
+					 if (TELEPHONE_PATTERN.matcher(telephone).matches() == false) {
+					    	JOptionPane.showMessageDialog(null, "L`insertion du numero telephone n`est pas bon");
+					 }
+					 
+					 if (EMAIL_PATTERN.matcher(email).matches() == false) {
+					    	JOptionPane.showMessageDialog(null, "L`insertion de l'email n`est pas bon");
+					 }
+					 
+					 if (VOITURE_PATTERN.matcher(voiture).matches() == false) {
+					    	JOptionPane.showMessageDialog(null, "L`insertion de la voiture n`est pas bon");
+					 }
+					 
+					
+					 if (DATE_PATTERN.matcher(date).matches() == false) {
+					    	JOptionPane.showMessageDialog(null, "L`insertion de la date n`est pas bon");
+					 }
+					 
+					 if (NOM_PATTERN.matcher(nom).matches() && PRENOM_PATTERN.matcher(prenom).matches()
+						 && TELEPHONE_PATTERN.matcher(telephone).matches() && EMAIL_PATTERN.matcher(email).matches()
+						 && VOITURE_PATTERN.matcher(voiture).matches() && DATE_PATTERN.matcher(date).matches())
+					 {
+					 
 					pst = con.prepareStatement("insert into test_conduite(civilite,nom,prenom,telephone,email,voiture,date,etat)values(?,?,?,?,?,?,?,?)");
-					pst.setString(1, civilite);
+					pst.setString(1, (String) civilite);
 					pst.setString(2, nom);
 					pst.setString(3, prenom);
 					pst.setString(4, telephone);
@@ -269,7 +293,7 @@ public class Test_Conduite {
 					JOptionPane.showMessageDialog(null, "Record Added!");
 					table_load();
 					
-						          
+					dropcivil.setSelectedItem("");	          
 					txtnom.setText("");
 					txtprenom.setText("");
 					txttelephone.setText("");
@@ -279,6 +303,7 @@ public class Test_Conduite {
 					dropetat.setSelectedItem("");
 					txtnom.requestFocus();
 				   }
+				 }
 			 
 				catch (SQLException e1) 
 			        {
@@ -290,7 +315,7 @@ public class Test_Conduite {
 		frame.getContentPane().add(btnNewButton);
 		
 		JButton btnExit = new JButton("Sortir");
-		btnExit.setBounds(170, 768, 107, 50);
+		btnExit.setBounds(851, 679, 122, 50);
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
@@ -299,10 +324,11 @@ public class Test_Conduite {
 		frame.getContentPane().add(btnExit);
 		
 		JButton btnClear = new JButton("Effacer");
-		btnClear.setBounds(12, 768, 107, 50);
+		btnClear.setBounds(643, 679, 128, 50);
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
+				dropcivil.setSelectedItem("");
 				txtnom.setText("");
 				txtprenom.setText("");
 				txttelephone.setText("");
@@ -316,14 +342,14 @@ public class Test_Conduite {
 		frame.getContentPane().add(btnClear);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(435, 168, 910, 650);
+		scrollPane.setBounds(435, 179, 910, 464);
 		frame.getContentPane().add(scrollPane);
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(144, 64, 1067, 69);
+		panel_1.setBounds(12, 64, 1333, 69);
 		panel_1.setBorder(new TitledBorder(null, "Search", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		frame.getContentPane().add(panel_1);
 		panel_1.setLayout(null);
@@ -349,7 +375,7 @@ public class Test_Conduite {
 			            if(rs.next()==true)
 			            {
 			              
-			       
+			            	Object civilite = rs.getObject(1);
 			                String nom = rs.getString(2);
 			                String prenom = rs.getString(3);
 			                String telephone = rs.getString(4);
@@ -358,7 +384,7 @@ public class Test_Conduite {
 			                String date = rs.getString(7);
 			                Object etat = rs.getObject(8);
 			                   
-			                
+			                dropcivil.setSelectedItem(civilite);
 			                txtnom.setText(nom);
 			                txtprenom.setText(prenom);
 			                txttelephone.setText(telephone);
@@ -374,7 +400,7 @@ public class Test_Conduite {
 			            	
 			            	
 			            	
-			            	
+			            	dropcivil.setSelectedItem("");
 			            	txtnom.setText("");
 			                txtprenom.setText("");
 			                txttelephone.setText("");
@@ -391,34 +417,20 @@ public class Test_Conduite {
 			        }
 			}
 		});
-		txtid_test.setBounds(145, 22, 860, 22);
+		txtid_test.setBounds(145, 22, 1154, 22);
 		txtid_test.setColumns(10);
 		panel_1.add(txtid_test);
 		
 		JButton btnUpdate = new JButton("Modifier");
-		btnUpdate.setBounds(170, 690, 107, 50);
+		btnUpdate.setBounds(242, 679, 128, 50);
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 						
-				String civilite = null,nom,prenom,telephone,email,voiture,date,id_test;
-				Object etat;
+				String nom,prenom,telephone,email,voiture,date,id_test;
+				Object etat,civilite;
 				
-				if(rdmonsieur_1.isSelected()) {
-					civilite = "Monsieur";
-				}
-				
-				if(rdmadame_1.isSelected()) {
-					civilite = "Madame";
-				}
-				
-				if (civilite.equals("Monsieur")) {
-					rdmonsieur_1.setSelected(true);
-				}
-				else {
-					rdmadame_1.setSelected(true);
-				}
-				
-
+		
+				civilite = dropcivil.getSelectedItem();
 				nom = txtnom.getText();
 				prenom = txtprenom.getText();
 				telephone = txttelephone.getText();
@@ -432,7 +444,7 @@ public class Test_Conduite {
 					 
 					 
 						pst = con.prepareStatement("update test_conduite set civilite=?,nom=?,prenom=?,telephone=?,email=?,voiture=?,date=?,etat=? where id_test =?");
-						pst.setString(1, civilite);
+						pst.setString(1, (String) civilite);
 			            pst.setString(2, nom);
 			            pst.setString(3, prenom);
 			            pst.setString(4, telephone);
@@ -446,7 +458,7 @@ public class Test_Conduite {
 			            table_load();
 			           
 			           
-			            
+			            dropcivil.setSelectedItem("");
 						txtnom.setText("");
 						txtprenom.setText("");
 						txttelephone.setText("");
@@ -466,7 +478,7 @@ public class Test_Conduite {
 		frame.getContentPane().add(btnUpdate);
 		
 		JButton btnDelete = new JButton("Supprimer");
-		btnDelete.setBounds(313, 690, 107, 50);
+		btnDelete.setBounds(435, 679, 135, 50);
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -488,7 +500,6 @@ public class Test_Conduite {
 		            txtemail.setText("");
 		            textvoiture.setText("");
 		            textdate.setText("");
-		            
 		            txtnom.requestFocus();
 				}
 		

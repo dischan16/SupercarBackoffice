@@ -62,6 +62,10 @@
         <element href="RH.uml#_vx_xsJ4MEeuLho7ErCHAZA"/>
         <layoutConstraint xsi:type="notation:Location" xmi:id="_vyGfYZ4MEeuLho7ErCHAZA"/>
       </children>
+      <children xsi:type="notation:Shape" xmi:id="_TG3TcKEAEeuWAdfTiZx2dw" type="Property_ClassAttributeLabel">
+        <element href="RH.uml#_S59f4KEAEeuWAdfTiZx2dw"/>
+        <layoutConstraint xsi:type="notation:Location" xmi:id="_TG36gKEAEeuWAdfTiZx2dw"/>
+      </children>
       <styles xsi:type="notation:TitleStyle" xmi:id="_g1MbMZ4MEeuLho7ErCHAZA"/>
       <styles xsi:type="notation:SortingStyle" xmi:id="_g1MbMp4MEeuLho7ErCHAZA"/>
       <styles xsi:type="notation:FilteringStyle" xmi:id="_g1MbM54MEeuLho7ErCHAZA"/>

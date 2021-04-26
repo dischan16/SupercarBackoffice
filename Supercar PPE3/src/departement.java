@@ -18,12 +18,11 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JComboBox;
 
 public class departement {
 
 	private JFrame frame;
-	private JTextField txtnom;
-	private JTextField txtadresse;
 	private JTable table;
 	private JTextField txtid_dept;
 
@@ -114,43 +113,58 @@ public class departement {
 		lblEdition.setBounds(12, 129, 166, 33);
 		panel.add(lblEdition);
 		
-		txtnom = new JTextField();
-		txtnom.setBounds(202, 67, 216, 27);
-		panel.add(txtnom);
-		txtnom.setColumns(10);
-		
-		txtadresse = new JTextField();
-		txtadresse.setColumns(10);
-		txtadresse.setBounds(202, 133, 216, 27);
-		panel.add(txtadresse);
-		
 		JLabel lblNom_Departement = new JLabel("Nom_Departement");
 		lblNom_Departement.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNom_Departement.setBounds(12, 63, 166, 33);
 		panel.add(lblNom_Departement);
 		
-		JButton btnNewButton = new JButton("Save");
+		JComboBox<String> dropnom = new JComboBox<String>();
+		dropnom.setBounds(214, 69, 209, 27);
+		panel.add(dropnom);
+		
+		dropnom.addItem(" ");
+		dropnom.addItem("Administration");
+		dropnom.addItem("Comptabilite");
+		dropnom.addItem("Vente	");
+		dropnom.addItem("RH");
+		
+		JComboBox<String> dropadd = new JComboBox<String>();
+		dropadd.setBounds(214, 135, 209, 27);
+		panel.add(dropadd);
+		
+		dropadd.addItem(" ");
+		dropadd.addItem("Siege Social");		
+		dropadd.addItem("Port Louis");
+		dropadd.addItem("Baie du Tombeau");
+		dropadd.addItem("Phoenix");
+		dropadd.addItem("Plaisance");
+		
+		
+		JButton btnNewButton = new JButton("Sauvegarder");
 		btnNewButton.setBounds(40, 645, 107, 50);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{			
-				String nom_dept,adresse_dept;
-				nom_dept = txtnom.getText();
-				adresse_dept = txtadresse.getText();
+				Object nom_dept,adresse_dept;
+				
+				nom_dept = dropnom.getSelectedItem();
+				adresse_dept = dropadd.getSelectedItem();
 
 							
 				 try {
+					 
+					 
 					pst = con.prepareStatement("insert into rh_departement(nom_dept,adresse_dept)values(?,?)");
-					pst.setString(1, nom_dept);
-					pst.setString(2, adresse_dept);
+					pst.setString(1, (String) nom_dept);
+					pst.setString(2, (String) adresse_dept);
 					pst.executeUpdate();
 					JOptionPane.showMessageDialog(null, "Record Added!");
 					table_load();
 					
 						           
-					txtnom.setText("");
-					txtadresse.setText("");
-					txtnom.requestFocus();
+					dropnom.setSelectedItem("");
+					dropadd.setSelectedItem("");
+//					txtnom.requestFocus();
 				   }
 			 
 				catch (SQLException e1) 
@@ -162,7 +176,7 @@ public class departement {
 		});
 		frame.getContentPane().add(btnNewButton);
 		
-		JButton btnExit = new JButton("Exit");
+		JButton btnExit = new JButton("Sortie");
 		btnExit.setBounds(193, 740, 107, 50);
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -171,13 +185,13 @@ public class departement {
 		});
 		frame.getContentPane().add(btnExit);
 		
-		JButton btnClear = new JButton("Clear");
+		JButton btnClear = new JButton("Effacer");
 		btnClear.setBounds(40, 740, 107, 50);
 		btnClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				txtnom.setText("");
-				txtadresse.setText("");
-				txtnom.requestFocus();
+				dropnom.setSelectedItem("");
+				dropadd.setSelectedItem("");
+//				txtnom.requestFocus();
 			}
 		});
 		frame.getContentPane().add(btnClear);
@@ -216,20 +230,19 @@ public class departement {
 			            if(rs.next()==true)
 			            {
 			              
-			                String nom_dept = rs.getString(1);
-			                String adresse_dept = rs.getString(2);
+			                Object nom_dept = rs.getString(1);
+			                Object adresse_dept = rs.getString(2);
 		
 			                
-			                txtnom.setText(nom_dept);
-			                txtadresse.setText(adresse_dept);
+			                dropnom.setSelectedItem(nom_dept);
+			                dropadd.setSelectedItem(adresse_dept);
 			        
 			                
 			            }   
 			            else
 			            {
-			            	txtnom.setText("");
-			            	txtadresse.setText("");
-	
+			            	 dropnom.setSelectedItem("");
+				             dropadd.setSelectedItem("");
 			                 
 			            }
 
@@ -244,29 +257,30 @@ public class departement {
 		txtid_dept.setColumns(10);
 		panel_1.add(txtid_dept);
 		
-		JButton btnUpdate = new JButton("Update");
+		JButton btnUpdate = new JButton("Modifier");
 		btnUpdate.setBounds(193, 645, 107, 50);
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				String nom_dept,adresse_dept,id_dept;
+				String id_dept;
+				Object nom_dept,adresse_dept;
 				
-				nom_dept = txtnom.getText();
-				adresse_dept = txtadresse.getText();
+				nom_dept = dropnom.getSelectedItem();
+				adresse_dept = dropadd.getSelectedItem();
 				id_dept  = txtid_dept.getText();
 				
 				 try {
 						pst = con.prepareStatement("update rh_departement set nom_dept= ?,adresse_dept=? where id_dept =?");
-						pst.setString(1, nom_dept);
-			            pst.setString(2, adresse_dept);
+						pst.setString(1, (String) nom_dept);
+			            pst.setString(2, (String) adresse_dept);
 			            pst.setString(3, id_dept);
 			            pst.executeUpdate();
 			            JOptionPane.showMessageDialog(null, "Record Updated!");
 			            table_load();
 			           
-			            txtnom.setText("");
-			            txtadresse.setText("");
-			            txtnom.requestFocus();
+			            dropnom.setSelectedItem("");
+						dropadd.setSelectedItem("");
+//			            txtnom.requestFocus();
 					}
 
 		            catch (SQLException e1) {
@@ -276,7 +290,7 @@ public class departement {
 		});
 		frame.getContentPane().add(btnUpdate);
 		
-		JButton btnDelete = new JButton("Delete");
+		JButton btnDelete = new JButton("Supprimer");
 		btnDelete.setBounds(353, 645, 107, 50);
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -291,10 +305,8 @@ public class departement {
 		            pst.executeUpdate();
 		            JOptionPane.showMessageDialog(null, "Record Deleted!");
 		            table_load();
-		           
-		            txtnom.setText("");
-		            txtadresse.setText("");
-		            txtnom.requestFocus();
+		         
+//		            txtnom.requestFocus();
 				}
 		
 		        catch (SQLException e1) {
