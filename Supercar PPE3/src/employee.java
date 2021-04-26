@@ -109,7 +109,7 @@ public class employee {
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Employee");
-		lblNewLabel.setBounds(838, 0, 194, 79);
+		lblNewLabel.setBounds(836, 0, 194, 79);
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 40));
 		frame.getContentPane().add(lblNewLabel);
 		
