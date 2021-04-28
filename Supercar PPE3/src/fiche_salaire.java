@@ -2,12 +2,10 @@ import java.awt.EventQueue;
 import java.sql.*;
 import java.util.regex.Pattern;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Document;
 
 import com.itextpdf.text.FontFactory;
@@ -52,7 +50,7 @@ public class fiche_salaire {
 				try {
 					fiche_salaire window = new fiche_salaire();
 					window.frame.setVisible(true);
-				} catch (Exception e) {
+				} catch (Exception e ) {
 					e.printStackTrace();
 				}
 			}
@@ -70,7 +68,7 @@ public class fiche_salaire {
 
 	Connection con;
 	PreparedStatement pst;
-	
+
 	ResultSet rs;
 	private JTextField txtemail;
 	private JTextField txtcompte_bancaire;
@@ -98,11 +96,10 @@ public class fiche_salaire {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 
 		return banque;
 	}
-	
+
 	public String Encrpyt_Banque(String banque) {
 		SecretKey key;
 		try {
@@ -111,7 +108,6 @@ public class fiche_salaire {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 
 		return banque;
 	}
@@ -129,9 +125,8 @@ public class fiche_salaire {
 			pst = con.prepareStatement("select * from rh_employee");
 			rs = pst.executeQuery();
 
-			DefaultTableModel tableModel = new DefaultTableModel(new Object[][] {},
-					new String[] { "ID", "Nom", "Prenom", "Email",
-							"Compte Bancaire", "Numero ID", "salaire", "Poste", "Departement" });
+			DefaultTableModel tableModel = new DefaultTableModel(new Object[][] {}, new String[] { "ID", "Nom",
+					"Prenom", "Email", "Compte Bancaire", "Numero ID", "salaire", "Poste", "Departement" });
 			while (rs.next()) {
 				String id_emp = rs.getString("id_emp");
 
@@ -144,8 +139,7 @@ public class fiche_salaire {
 				String poste = rs.getString("poste");
 				String departement = rs.getString("departement");
 
-				String[] data = { id_emp, nom, prenom,  email, 
-						compte_bancaire, numero_id, salaire, poste, departement };
+				String[] data = { id_emp, nom, prenom, email, compte_bancaire, numero_id, salaire, poste, departement };
 				tableModel.addRow(data);
 
 			}
@@ -261,11 +255,9 @@ public class fiche_salaire {
 		panel.add(dropposte);
 
 		dropposte.addItem(" ");
-		dropposte.addItem("Vendeur");
-		dropposte.addItem("RH");
-		dropposte.addItem("Comptable");
-		dropposte.addItem("Administrateur");
+		dropposte.addItem("Salarié");
 		dropposte.addItem("Manager");
+		dropposte.addItem("Admin");
 
 		JComboBox<String> dropdept = new JComboBox<String>();
 		dropdept.setBounds(160, 428, 211, 26);
@@ -342,7 +334,7 @@ public class fiche_salaire {
 					final String EMAIL_REGEX = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$";
 
 					final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
-					
+
 					final String NUMID_REGEX = "^[A-Z]+[0-9]{12}+[A-Z]$";
 
 					final Pattern NUMID_PATTERN = Pattern.compile(NUMID_REGEX);
@@ -355,6 +347,10 @@ public class fiche_salaire {
 
 					final Pattern SALAIRE_PATTERN = Pattern.compile(SALAIRE_REGEX);
 
+					final String COMMISSION_REGEX = "[0-9]{3,}";
+
+					final Pattern COMMISSION_PATTERN = Pattern.compile(COMMISSION_REGEX);
+
 					if (NOM_PATTERN.matcher(nom).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion du nom n`est pas bon");
 					}
@@ -366,7 +362,7 @@ public class fiche_salaire {
 					if (EMAIL_PATTERN.matcher(email).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion de l'email n`est pas bon");
 					}
-					
+
 					if (NUMID_PATTERN.matcher(numero_id).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion du numero identite n`est pas bon");
 					}
@@ -375,18 +371,22 @@ public class fiche_salaire {
 						JOptionPane.showMessageDialog(null, "L`insertion du compte bancaire n`est pas bon");
 					}
 
-		
 					if (SALAIRE_PATTERN.matcher(Decrypt_Banque(salaire)).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion du salaire n`est pas bon");
+					}
+					if (COMMISSION_PATTERN.matcher(commission).matches() == false) {
+						JOptionPane.showMessageDialog(null, "L`insertion de la commission n`est pas bon");
 					}
 
 					if (NOM_PATTERN.matcher(nom).matches() && PRENOM_PATTERN.matcher(prenom).matches()
 							&& EMAIL_PATTERN.matcher(email).matches()
 							&& BANCAIRE_PATTERN.matcher(Decrypt_Banque(compte_bancaire)).matches()
 							&& NUMID_PATTERN.matcher(numero_id).matches()
-							&& SALAIRE_PATTERN.matcher(Decrypt_Banque(salaire)).matches()) {
+							&& SALAIRE_PATTERN.matcher(Decrypt_Banque(salaire)).matches()
+							&& COMMISSION_PATTERN.matcher(commission).matches()) {
 
-						pst = con.prepareStatement("insert into fiche_salaire(nom,prenom,email,numero_id,compte_bancaire,salaire,poste,departement,commission)values(?,?,?,?,?,?,?,?,?)");
+						pst = con.prepareStatement(
+								"insert into fiche_salaire(nom,prenom,email,numero_id,compte_bancaire,salaire,poste,departement,commission)values(?,?,?,?,?,?,?,?,?)");
 						pst.setString(1, nom);
 						pst.setString(2, prenom);
 						pst.setString(3, email);
@@ -397,90 +397,74 @@ public class fiche_salaire {
 						pst.setString(8, (String) departement);
 						pst.setString(9, commission);
 						pst.executeUpdate();
-						JOptionPane.showMessageDialog(null, "Record Added!");	
-						
-					}
-					table_load();
-						
-				}
-				catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null, "Record Added!");
 
+						table_load();
+
+						nom = txtnom.getText();
+						prenom = txtprenom.getText();
+						email = txtemail.getText();
+						numero_id = txtnumero_id.getText();
+						compte_bancaire = Encrpyt_Banque(txtcompte_bancaire.getText());
+						salaire = Encrpyt_Banque(txtsalaire.getText());
+						poste = dropposte.getSelectedItem();
+						departement = dropdept.getSelectedItem();
+						commission = txtcommission.getText();
+
+						JFileChooser dialog = new JFileChooser();
+						dialog.setSelectedFile(new File(nom + "_FicheSalaire" + ".pdf"));
+						int dialogResult = dialog.showSaveDialog(null);
+						if (dialogResult == JFileChooser.APPROVE_OPTION) {
+							String filePath = dialog.getSelectedFile().getPath();
+
+							Document myDoc = new Document();
+							@SuppressWarnings("unused")
+							PdfWriter myWriter = PdfWriter.getInstance(myDoc, new FileOutputStream(filePath));
+							myDoc.open();
+
+							myDoc.add(new Paragraph("FICHE SALAIRE", FontFactory.getFont(FontFactory.TIMES_BOLD, 20)));
+
+							myDoc.add(new Paragraph(" ", FontFactory.getFont(FontFactory.HELVETICA, 20)));
+
+							myDoc.add(new Paragraph("Detail de l'employée",
+									FontFactory.getFont(FontFactory.HELVETICA, 15)));
+							myDoc.add(
+									new Paragraph("Nom: " + nom + " ", FontFactory.getFont(FontFactory.HELVETICA, 15)));
+							myDoc.add(new Paragraph("Prenom: " + prenom + " ",
+									FontFactory.getFont(FontFactory.HELVETICA, 15)));
+							myDoc.add(new Paragraph("Email: " + email + " ",
+									FontFactory.getFont(FontFactory.HELVETICA, 15)));
+							myDoc.add(new Paragraph("Numéro carte d'identité: " + numero_id + " ",
+									FontFactory.getFont(FontFactory.HELVETICA, 15)));
+							myDoc.add(new Paragraph("Nombre compte bancaire: " + Decrypt_Banque(compte_bancaire) + " ",
+									FontFactory.getFont(FontFactory.HELVETICA, 15)));
+							myDoc.add(new Paragraph("Poste: " + poste + " ",
+									FontFactory.getFont(FontFactory.HELVETICA, 15)));
+							myDoc.add(new Paragraph("Departement: " + departement + " ",
+									FontFactory.getFont(FontFactory.HELVETICA, 15)));
+							myDoc.add(new Paragraph("Commission: " + commission + " ",
+									FontFactory.getFont(FontFactory.HELVETICA, 15)));
+							myDoc.add(new Paragraph("Salaire: " + Decrypt_Banque(salaire) + " ",
+									FontFactory.getFont(FontFactory.HELVETICA, 15)));
+
+							myDoc.close();
+							JOptionPane.showMessageDialog(null, "PDF Valider");
+
+							txtnom.setText("");
+							txtprenom.setText("");
+							txtemail.setText("");
+							txtnumero_id.setText("");
+							txtcompte_bancaire.setText("");
+							txtsalaire.setText("");
+							dropposte.setSelectedItem("");
+							dropdept.setSelectedItem("");
+							txtcommission.setText("");
+							txtnom.requestFocus();
+						}
+					}
+				}catch (Exception e1) {
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
-				
-				nom = txtnom.getText();
-				prenom = txtprenom.getText();
-				email = txtemail.getText();
-				numero_id = txtnumero_id.getText();
-				compte_bancaire = Encrpyt_Banque(txtcompte_bancaire.getText());
-				salaire = Encrpyt_Banque(txtsalaire.getText());
-				poste = dropposte.getSelectedItem();
-				departement = dropdept.getSelectedItem();
-				commission = txtcommission.getText();
-
-				
-				JFileChooser dialog = new JFileChooser();
-				dialog.setSelectedFile(new File(nom + "_FicheSalaire" + ".pdf"));
-				int dialogResult = dialog.showSaveDialog(null);
-				if (dialogResult == JFileChooser.APPROVE_OPTION) {
-					String filePath = dialog.getSelectedFile().getPath();
-
-					try {
-						
-
-						
-						Document myDoc = new Document();
-						@SuppressWarnings("unused")
-						PdfWriter myWriter = PdfWriter.getInstance(myDoc, new FileOutputStream(filePath));
-						myDoc.open();
-
-						myDoc.add(new Paragraph("FICHE SALAIRE", FontFactory.getFont(FontFactory.TIMES_BOLD, 20)));
-
-						myDoc.add(new Paragraph(" ", FontFactory.getFont(FontFactory.HELVETICA, 20)));
-
-						myDoc.add(
-								new Paragraph("Detail de l'employée", FontFactory.getFont(FontFactory.HELVETICA, 15)));
-						myDoc.add(new Paragraph("Nom: " + nom + " ", FontFactory.getFont(FontFactory.HELVETICA, 15)));
-						myDoc.add(new Paragraph("Prenom: " + prenom + " ",
-								FontFactory.getFont(FontFactory.HELVETICA, 15)));
-						myDoc.add(
-								new Paragraph("Email: " + email + " ", FontFactory.getFont(FontFactory.HELVETICA, 15)));
-						myDoc.add(new Paragraph("Numéro carte d'identité: " + numero_id + " ",
-								FontFactory.getFont(FontFactory.HELVETICA, 15)));
-						myDoc.add(new Paragraph("Nombre compte bancaire: " + Decrypt_Banque(compte_bancaire) + " ",
-								FontFactory.getFont(FontFactory.HELVETICA, 15)));
-						myDoc.add(
-								new Paragraph("Poste: " + poste + " ", FontFactory.getFont(FontFactory.HELVETICA, 15)));
-						myDoc.add(new Paragraph("Departement: " + departement + " ",
-								FontFactory.getFont(FontFactory.HELVETICA, 15)));
-						myDoc.add(new Paragraph("Commission: " + commission + " ",
-								FontFactory.getFont(FontFactory.HELVETICA, 15)));
-						myDoc.add(new Paragraph("Salaire: " + Decrypt_Banque(salaire) + " ",
-								FontFactory.getFont(FontFactory.HELVETICA, 15)));
-
-						myDoc.close();
-						JOptionPane.showMessageDialog(null, "PDF Valider");
-						
-
-						txtnom.setText("");
-						txtprenom.setText("");
-						txtemail.setText("");
-						txtnumero_id.setText("");
-						txtcompte_bancaire.setText("");
-						txtsalaire.setText("");
-						dropposte.setSelectedItem("");
-						dropdept.setSelectedItem("");
-						txtcommission.setText("");
-						txtnom.requestFocus();
-
-					} catch (FileNotFoundException | DocumentException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-
-					catch (Exception er) {
-						JOptionPane.showMessageDialog(null, "Error");
-					}
 				}
 
 			}

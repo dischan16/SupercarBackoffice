@@ -1,13 +1,13 @@
 import java.awt.EventQueue;
 import java.sql.*;
 
+import javax.crypto.SecretKey;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-
+import javax.swing.table.DefaultTableModel;
 import java.awt.Font;
-import net.proteanit.sql.DbUtils;
 
 public class affichage_fsalaire {
 
@@ -61,19 +61,64 @@ public class affichage_fsalaire {
 	        }
 	    }
 	 
-	  public void table_load()
-	    {
-	    	try 
-	    	{
-		    pst = con.prepareStatement("select * from fiche_salaire");
-		    rs = pst.executeQuery();
-		    table.setModel(DbUtils.resultSetToTableModel(rs));
-		} 
-	    	catch (SQLException e) 
-	    	 {
-	    		e.printStackTrace();
-		  } 
-	    }
+	  public String Decrypt_Banque(String banque) {
+			SecretKey key;
+			try {
+				key = ApiBlowfish.decryptKey();
+				banque = ApiBlowfish.decryptInString(banque, key);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+
+			return banque;
+		}
+		
+		public String Encrpyt_Banque(String banque) {
+			SecretKey key;
+			try {
+				key = ApiBlowfish.decryptKey();
+				banque = ApiBlowfish.encryptInString(banque, key);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+
+			return banque;
+		}
+
+		public void table_load() {
+			try {
+				pst = con.prepareStatement("select * from fiche_salaire");
+				rs = pst.executeQuery();
+
+				DefaultTableModel tableModel = new DefaultTableModel(new Object[][] {},
+						new String[] { "ID", "Nom", "Prenom", "Email",
+								"Compte Bancaire", "Numero ID", "salaire", "Poste", "Departement","Commission" });
+				while (rs.next()) {
+					String id_emp = rs.getString("id_salaire");
+
+					String nom = rs.getString("nom");
+					String prenom = rs.getString("prenom");
+					String email = rs.getString("email");
+					String compte_bancaire = Decrypt_Banque(rs.getString("compte_bancaire"));
+					String numero_id = rs.getString("numero_id");
+					String salaire = Decrypt_Banque(rs.getString("salaire"));
+					String poste = rs.getString("poste");
+					String departement = rs.getString("departement");
+					String commission = rs.getString("commission");
+
+					String[] data = { id_emp, nom, prenom,  email, 
+							compte_bancaire, numero_id, salaire, poste, departement,commission };
+					tableModel.addRow(data);
+
+				}
+				table.setModel(tableModel);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	 
 	
 

@@ -296,12 +296,10 @@ public class employee {
 		panel.add(dropposte);
 
 		dropposte.addItem(" ");
-		dropposte.addItem("Vendeur");
-		dropposte.addItem("RH");
-		dropposte.addItem("Comptable");
-		dropposte.addItem("Administrateur");
+		dropposte.addItem("Salarié");
 		dropposte.addItem("Manager");
-
+		dropposte.addItem("Admin");
+		
 		JComboBox<String> dropdept = new JComboBox<String>();
 		dropdept.setBounds(160, 596, 211, 26);
 		panel.add(dropdept);
