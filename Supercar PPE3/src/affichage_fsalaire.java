@@ -13,6 +13,8 @@ public class affichage_fsalaire {
 
 	private JFrame frame;
 	private JTable table;
+	private JLabel lblFicheSalaireTotale;
+	private int count = 0;
 
 	/**
 	 * Launch the application.
@@ -34,8 +36,9 @@ public class affichage_fsalaire {
 	 * Create the application.
 	 */
 	public affichage_fsalaire() {
-		initialize();
 		Connect();
+		initialize();
+		count_load();
 		table_load();
 	}
 	
@@ -86,10 +89,26 @@ public class affichage_fsalaire {
 
 			return banque;
 		}
+		
+		public void count_load() {
+			count = 0;
+			try {
+				pst = con.prepareStatement("select * from fiche_salaire");
+				rs = pst.executeQuery();
+
+				while (rs.next()) {
+					count++;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			lblFicheSalaireTotale.setText("Fiche Salaire Totale: "+count);
+		}
 
 		public void table_load() {
 			try {
-				pst = con.prepareStatement("select * from fiche_salaire");
+				pst = con.prepareStatement("select * from fiche_salaire where MONTH(date_salaire) = MONTH(CURRENT_DATE())\r\n" + 
+						"AND YEAR(date_salaire) = YEAR(CURRENT_DATE())");
 				rs = pst.executeQuery();
 
 				DefaultTableModel tableModel = new DefaultTableModel(new Object[][] {},
@@ -97,7 +116,6 @@ public class affichage_fsalaire {
 								"Compte Bancaire", "Numero ID", "salaire", "Poste", "Departement","Commission" });
 				while (rs.next()) {
 					String id_emp = rs.getString("id_salaire");
-
 					String nom = rs.getString("nom");
 					String prenom = rs.getString("prenom");
 					String email = rs.getString("email");
@@ -127,7 +145,7 @@ public class affichage_fsalaire {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1288, 593);
+		frame.setBounds(100, 100, 1288, 640);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -142,6 +160,11 @@ public class affichage_fsalaire {
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
+		
+		lblFicheSalaireTotale = new JLabel();
+		lblFicheSalaireTotale.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblFicheSalaireTotale.setBounds(1016, 546, 242, 16);
+		frame.getContentPane().add(lblFicheSalaireTotale);
 		
 	
 			}

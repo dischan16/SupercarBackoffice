@@ -28,15 +28,16 @@ public class Test_Conduite {
 	private JTextField txtprenom;
 	private JTable table;
 	private JTextField txtid_test;
+	
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String login) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Test_Conduite window = new Test_Conduite();
+					Test_Conduite window = new Test_Conduite(login);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,9 +49,10 @@ public class Test_Conduite {
 	/**
 	 * Create the application.
 	 */
-	public Test_Conduite() {
-		initialize();
+	public Test_Conduite(String login) {
 		Connect();
+		initialize(login);
+		count_load();
 		table_load();
 	}
 
@@ -60,6 +62,8 @@ public class Test_Conduite {
 	private JTextField txttelephone;
 	private JTextField txtemail;
 	private JTextField textdate;
+	private JLabel lblNoTestConduite;
+	private int count = 0;
 
 	public void Connect() {
 		try {
@@ -70,6 +74,29 @@ public class Test_Conduite {
 		} catch (SQLException ex) {
 
 		}
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public int getCount() {
+		return this.count;
+	}
+	
+	public void count_load() {
+		count = 0;
+		try {
+			pst = con.prepareStatement("select * from test_conduite");
+			rs = pst.executeQuery();
+
+			while (rs.next()) {
+				count++;
+			}
+			lblNoTestConduite.setText("No Test Conduite : "+getCount());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 	}
 
 	public void table_load() {
@@ -88,7 +115,7 @@ public class Test_Conduite {
 		PreparedStatement pst = con.prepareStatement("Select * from voitures");
 		ResultSet rs = pst.executeQuery();
 		theModel.removeAllElements();
-//		theModel.addElement("");
+		theModel.addElement("");
 		while (rs.next()) {
 			theModel.addElement(rs.getString("marque") + " " + rs.getString("model"));
 		}
@@ -100,7 +127,10 @@ public class Test_Conduite {
 	 * Initialize the contents of the frame.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void initialize() {
+	private void initialize(String login) {
+		AdminAccount account = new AdminAccount();
+		account.DatabaseConnexion(login, null, null, frame);
+		System.out.print(account.getId());
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1393, 810);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -186,6 +216,7 @@ public class Test_Conduite {
 		dropetat.setBounds(160, 397, 211, 26);
 		panel.add(dropetat);
 
+		dropetat.addItem("");
 		dropetat.addItem("En attente");
 		dropetat.addItem("En cours");
 		dropetat.addItem("Termine");
@@ -196,7 +227,7 @@ public class Test_Conduite {
 		dropcivil.setBounds(160, 47, 211, 26);
 		panel.add(dropcivil);
 
-		dropcivil.addItem(" ");
+		dropcivil.addItem("");
 		dropcivil.addItem("Monsieur");
 		dropcivil.addItem("Madame");
 
@@ -213,23 +244,23 @@ public class Test_Conduite {
 		});
 		dropvoiture.setBounds(160, 305, 211, 26);
 		panel.add(dropvoiture);
+		dropvoiture.addItem("");
 
 		JButton btnNewButton = new JButton("Sauvegarder");
 		btnNewButton.setBounds(51, 679, 135, 50);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String nom, prenom, telephone, email, voiture, date;
-				Object civilite, etat;
-
-				civilite = dropcivil.getSelectedItem();
+				String civilite, nom, prenom, telephone, email, voiture, date, etat;
+	
+				civilite = dropcivil.getSelectedItem().toString();
 				nom = txtnom.getText();
 				prenom = txtprenom.getText();
 				telephone = txttelephone.getText();
 				email = txtemail.getText();
 				voiture = dropvoiture.getSelectedItem().toString();
 				date = textdate.getText();
-				etat = dropetat.getSelectedItem();
-
+				etat = dropetat.getSelectedItem().toString();
+						
 				try {
 
 					final String NOM_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
@@ -252,6 +283,10 @@ public class Test_Conduite {
 
 					final Pattern DATE_PATTERN = Pattern.compile(DATE_REGEX);
 
+					if (civilite.equals("")) {
+						JOptionPane.showMessageDialog(null, "L`insertion civilite invalide");
+					}
+					
 					if (NOM_PATTERN.matcher(nom).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion du nom n`est pas bon");
 					}
@@ -267,28 +302,39 @@ public class Test_Conduite {
 					if (EMAIL_PATTERN.matcher(email).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion de l'email n`est pas bon");
 					}
+					
+					if (voiture.equals("")) {
+						JOptionPane.showMessageDialog(null, "L`insertion de la voiture invalide");
+					}
 
 
 					if (DATE_PATTERN.matcher(date).matches() == false) {
-						JOptionPane.showMessageDialog(null, "L`insertion de la date n`est pas bon");
+						JOptionPane.showMessageDialog(null, "L`insertion de la date n`est pas bon (dd/mm/yy)");
 					}
+					
+					if (etat.equals("")) {
+						JOptionPane.showMessageDialog(null, "L`insertion de l'etat invalide");
+					}
+					
 
-					if (NOM_PATTERN.matcher(nom).matches() && PRENOM_PATTERN.matcher(prenom).matches()
+					if (!civilite.equals("") && NOM_PATTERN.matcher(nom).matches() && PRENOM_PATTERN.matcher(prenom).matches()
 							&& TELEPHONE_PATTERN.matcher(telephone).matches() && EMAIL_PATTERN.matcher(email).matches()
-							&& DATE_PATTERN.matcher(date).matches()) {
+							&& DATE_PATTERN.matcher(date).matches()
+							&& !etat.equals("") && !voiture.equals("")) {
 
 						pst = con.prepareStatement(
 								"insert into test_conduite(civilite,nom,prenom,telephone,email,voiture,date,etat)values(?,?,?,?,?,?,?,?)");
-						pst.setString(1, (String) civilite);
+						pst.setString(1, civilite);
 						pst.setString(2, nom);
 						pst.setString(3, prenom);
 						pst.setString(4, telephone);
 						pst.setString(5, email);
 						pst.setString(6, voiture);
 						pst.setString(7, date);
-						pst.setString(8, (String) etat);
+						pst.setString(8, etat);
 						pst.executeUpdate();
 						JOptionPane.showMessageDialog(null, "Record Added!");
+						count_load();
 						table_load();
 
 						dropcivil.setSelectedItem("");
@@ -315,7 +361,13 @@ public class Test_Conduite {
 		btnExit.setBounds(851, 679, 122, 50);
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				int dialogButton = JOptionPane.YES_NO_OPTION;
+				int dialogResult = JOptionPane.showConfirmDialog(null, "Souhaitez-vous quitter la page 'Test de conduite'?", "Warning",
+						dialogButton);
+				if (dialogResult == JOptionPane.YES_OPTION) {
+				Test_Conduite.this.frame.setVisible(false);
+				login_connection.main(login);
+				}
 			}
 		});
 		frame.getContentPane().add(btnExit);
@@ -334,6 +386,7 @@ public class Test_Conduite {
 				dropvoiture.setSelectedItem("");
 				dropetat.setSelectedItem("");
 				txtnom.requestFocus();
+			
 			}
 		});
 		frame.getContentPane().add(btnClear);
@@ -372,14 +425,14 @@ public class Test_Conduite {
 
 					if (rs.next() == true) {
 
-						Object civilite = rs.getObject(1);
+						String civilite = rs.getString(1);
 						String nom = rs.getString(2);
 						String prenom = rs.getString(3);
 						String telephone = rs.getString(4);
 						String email = rs.getString(5);
-						Object voiture = rs.getObject(6);
+						String voiture = rs.getString(6);
 						String date = rs.getString(7);
-						Object etat = rs.getObject(8);
+						String etat = rs.getString(8);
 
 						dropcivil.setSelectedItem(civilite);
 						txtnom.setText(nom);
@@ -418,10 +471,10 @@ public class Test_Conduite {
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				String nom, prenom, telephone, email, voiture, date, id_test;
-				Object etat, civilite;
+				String civilite, nom, prenom, telephone, email, voiture, date, id_test, etat;
+		
 
-				civilite = dropcivil.getSelectedItem();
+				civilite = dropcivil.getSelectedItem().toString();
 				nom = txtnom.getText();
 				prenom = txtprenom.getText();
 				telephone = txttelephone.getText();
@@ -429,20 +482,23 @@ public class Test_Conduite {
 				voiture = dropvoiture.getSelectedItem().toString();
 				date = textdate.getText();
 				id_test = txtid_test.getText();
-				etat = dropetat.getSelectedItem();
+				etat = dropetat.getSelectedItem().toString();
 
+				
 				try {
+					
+					if (account.getAccountType() == "manager") {
 
 					pst = con.prepareStatement(
 							"update test_conduite set civilite=?,nom=?,prenom=?,telephone=?,email=?,voiture=?,date=?,etat=? where id_test =?");
-					pst.setString(1, (String) civilite);
+					pst.setString(1, civilite);
 					pst.setString(2, nom);
 					pst.setString(3, prenom);
 					pst.setString(4, telephone);
 					pst.setString(5, email);
 					pst.setString(6, voiture);
 					pst.setString(7, date);
-					pst.setString(8, (String) etat);
+					pst.setString(8, etat);
 					pst.setString(9, id_test);
 					pst.executeUpdate();
 					JOptionPane.showMessageDialog(null, "Record Updated!");
@@ -458,14 +514,19 @@ public class Test_Conduite {
 					dropetat.setSelectedItem("");
 
 					txtnom.requestFocus();
+				
+				}else {
+					JOptionPane.showMessageDialog(null, "Vous n'avez pas les privileges!");
 				}
 
-				catch (SQLException e1) {
+				}catch (SQLException e1) {
 					e1.printStackTrace();
 				}
 			}
 		});
 		frame.getContentPane().add(btnUpdate);
+		
+
 
 		JButton btnDelete = new JButton("Supprimer");
 		btnDelete.setBounds(435, 679, 135, 50);
@@ -481,6 +542,7 @@ public class Test_Conduite {
 					pst.setString(1, id_test);
 					pst.executeUpdate();
 					JOptionPane.showMessageDialog(null, "Record Deleted!");
+					count_load();
 					table_load();
 
 					txtnom.setText("");
@@ -499,5 +561,10 @@ public class Test_Conduite {
 			}
 		});
 		frame.getContentPane().add(btnDelete);
+		
+		lblNoTestConduite = new JLabel();
+		lblNoTestConduite.setFont(new Font("Tahoma", Font.PLAIN, 22));
+		lblNoTestConduite.setBounds(1070, 690, 277, 27);
+		frame.getContentPane().add(lblNoTestConduite);
 	}
 }

@@ -53,8 +53,9 @@ public class employee {
 	 * Create the application.
 	 */
 	public employee() {
-		initialize();
 		Connect();
+		initialize();
+		count_load();
 		table_load();
 	}
 
@@ -68,6 +69,8 @@ public class employee {
 	private JTextField txtcompte_bancaire;
 	private JTextField txtnumero_id;
 	private JTextField txtsalaire;
+	private JLabel lblNoEmploy;
+	private int count = 0;
 
 	public void Connect() {
 		try {
@@ -78,6 +81,14 @@ public class employee {
 		} catch (SQLException ex) {
 
 		}
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public int getCount() {
+		return this.count;
 	}
 
 	public String Decrypt_Banque(String banque) {
@@ -102,6 +113,21 @@ public class employee {
 		}
 
 		return banque;
+	}
+
+	public void count_load() {
+		count = 0;
+		try {
+			pst = con.prepareStatement("select * from rh_employee");
+			rs = pst.executeQuery();
+
+			while (rs.next()) {
+				count++;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		lblNoEmploy.setText("No Employée : "+count);;
 	}
 
 	public void table_load() {
@@ -139,6 +165,27 @@ public class employee {
 			e.printStackTrace();
 		}
 	}
+	
+
+	/**
+	 * Junit Test Unitaires
+	 */
+	
+	 public static String testNom(String nomText) {
+		 final String NOM_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
+			final Pattern NOM_PATTERN = Pattern.compile(NOM_REGEX);
+			
+			if (NOM_PATTERN.matcher(nomText).matches() == false) {
+				JOptionPane.showMessageDialog(null, "L`insertion du nom n`est pas bon");
+			}
+
+		 return nomText;
+	    }
+	 
+	 public static String testPrenom(String prenomText) {
+		 return prenomText;
+	 }
+	   
 
 	/**
 	 * Initialize the contents of the frame.
@@ -279,7 +326,7 @@ public class employee {
 		dropcivil.setBounds(160, 49, 211, 26);
 		panel.add(dropcivil);
 
-		dropcivil.addItem(" ");
+		dropcivil.addItem("");
 		dropcivil.addItem("Monsieur");
 		dropcivil.addItem("Madame");
 
@@ -287,7 +334,7 @@ public class employee {
 		droplicense.setBounds(159, 380, 212, 27);
 		panel.add(droplicense);
 
-		droplicense.addItem(" ");
+		droplicense.addItem("");
 		droplicense.addItem("Oui");
 		droplicense.addItem("Non");
 
@@ -295,16 +342,16 @@ public class employee {
 		dropposte.setBounds(160, 554, 211, 27);
 		panel.add(dropposte);
 
-		dropposte.addItem(" ");
+		dropposte.addItem("");
 		dropposte.addItem("Salarié");
 		dropposte.addItem("Manager");
 		dropposte.addItem("Admin");
-		
+
 		JComboBox<String> dropdept = new JComboBox<String>();
 		dropdept.setBounds(160, 596, 211, 26);
 		panel.add(dropdept);
 
-		dropdept.addItem(" ");
+		dropdept.addItem("");
 		dropdept.addItem("Administration");
 		dropdept.addItem("Comptabilite");
 		dropdept.addItem("Vente	");
@@ -314,7 +361,7 @@ public class employee {
 		droplieu.setBounds(160, 641, 211, 26);
 		panel.add(droplieu);
 
-		droplieu.addItem(" ");
+		droplieu.addItem("");
 		droplieu.addItem("Siege Social");
 		droplieu.addItem("Port Louis");
 		droplieu.addItem("Baie du Tombeau");
@@ -325,23 +372,23 @@ public class employee {
 		btnNewButton.setBounds(435, 917, 156, 50);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String nom, prenom, age, telephone, adresse, email, compte_bancaire, numero_id, salaire;
-				Object civilite, license, poste, departement, lieu;
+				String civilite, nom, prenom, age, telephone, adresse, email, license, compte_bancaire, numero_id, salaire, poste, departement, lieu;
+				
 
-				civilite = dropcivil.getSelectedItem();
+				civilite = dropcivil.getSelectedItem().toString();
 				nom = txtnom.getText();
 				prenom = txtprenom.getText();
 				age = txtage.getText();
 				telephone = txttelephone.getText();
 				adresse = txtadresse.getText();
 				email = txtemail.getText();
-				license = droplicense.getSelectedItem();
+				license = droplicense.getSelectedItem().toString();
 				compte_bancaire = Encrpyt_Banque(txtcompte_bancaire.getText());
 				numero_id = txtnumero_id.getText();
 				salaire = Encrpyt_Banque(txtsalaire.getText());
-				poste = dropposte.getSelectedItem();
-				departement = dropdept.getSelectedItem();
-				lieu = droplieu.getSelectedItem();
+				poste = dropposte.getSelectedItem().toString();
+				departement = dropdept.getSelectedItem().toString();
+				lieu = droplieu.getSelectedItem().toString();
 
 				try {
 
@@ -380,6 +427,10 @@ public class employee {
 					final String SALAIRE_REGEX = "[0-9]{3,}";
 
 					final Pattern SALAIRE_PATTERN = Pattern.compile(SALAIRE_REGEX);
+					
+					if (civilite.equals("")) {
+						JOptionPane.showMessageDialog(null, "L`insertion civilite invalide");
+					}
 
 					if (NOM_PATTERN.matcher(nom).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion du nom n`est pas bon");
@@ -389,10 +440,11 @@ public class employee {
 						JOptionPane.showMessageDialog(null, "L`insertion du prenom n`est pas bon");
 					}
 
-					if (AGE_PATTERN.matcher(age).matches() == false) {
-						JOptionPane.showMessageDialog(null, "L`insertion de age n`est pas bon");
+					if (AGE_PATTERN.matcher(age).matches() == false || age.equals("")) {
+						JOptionPane.showMessageDialog(null, "L`insertion du age n`est pas bon");
 					}
-
+					
+					
 					if (TELEPHONE_PATTERN.matcher(telephone).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion du numero telephone n`est pas bon");
 					}
@@ -403,6 +455,10 @@ public class employee {
 
 					if (EMAIL_PATTERN.matcher(email).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion de l'email n`est pas bon");
+					}
+					
+					if (license.equals("")) {
+						JOptionPane.showMessageDialog(null, "L`insertion de license invalide");
 					}
 
 					if (BANCAIRE_PATTERN.matcher(Decrypt_Banque(compte_bancaire)).matches() == false) {
@@ -416,32 +472,47 @@ public class employee {
 					if (SALAIRE_PATTERN.matcher(Decrypt_Banque(salaire)).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion du salaire n`est pas bon");
 					}
+					
+					if (poste.equals("")) {
+						JOptionPane.showMessageDialog(null, "L`insertion du poste invalide");
+					}
 
-					if (NOM_PATTERN.matcher(nom).matches() && PRENOM_PATTERN.matcher(prenom).matches()
+					if (departement.equals("")) {
+						JOptionPane.showMessageDialog(null, "L`insertion de departement invalide");
+					}
+
+					
+					if (lieu.equals("")) {
+						JOptionPane.showMessageDialog(null, "L`insertion du lieu invalide");
+					}
+
+
+					if (!civilite.equals("") && NOM_PATTERN.matcher(nom).matches() && PRENOM_PATTERN.matcher(prenom).matches()
 							&& AGE_PATTERN.matcher(age).matches() && TELEPHONE_PATTERN.matcher(telephone).matches()
 							&& ADRESSE_PATTERN.matcher(adresse).matches() && EMAIL_PATTERN.matcher(email).matches()
-							&& BANCAIRE_PATTERN.matcher(Decrypt_Banque(compte_bancaire)).matches()
-							&& NUMID_PATTERN.matcher(numero_id).matches()
-							&& SALAIRE_PATTERN.matcher(Decrypt_Banque(salaire)).matches()) {
+							&& !license.equals("") && BANCAIRE_PATTERN.matcher(Decrypt_Banque(compte_bancaire)).matches()
+							&& NUMID_PATTERN.matcher(numero_id).matches() && SALAIRE_PATTERN.matcher(Decrypt_Banque(salaire)).matches()
+							&& !poste.equals("") && !departement.equals("") && !lieu.equals("")) {
 
 						pst = con.prepareStatement(
 								"insert into rh_employee(civilite,nom,prenom,age,telephone,adresse,email,license,compte_bancaire,numero_id,salaire,poste,departement,lieu) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-						pst.setString(1, (String) civilite);
+						pst.setString(1, civilite);
 						pst.setString(2, nom);
 						pst.setString(3, prenom);
 						pst.setString(4, age);
 						pst.setString(5, telephone);
 						pst.setString(6, adresse);
 						pst.setString(7, email);
-						pst.setString(8, (String) license);
+						pst.setString(8, license);
 						pst.setString(9, compte_bancaire);
 						pst.setString(10, numero_id);
 						pst.setString(11, salaire);
-						pst.setString(12, (String) poste);
-						pst.setString(13, (String) departement);
-						pst.setString(14, (String) lieu);
+						pst.setString(12, poste);
+						pst.setString(13, departement);
+						pst.setString(14, lieu);
 						pst.executeUpdate();
 						JOptionPane.showMessageDialog(null, "Record Added!");
+						count_load();
 						table_load();
 
 						dropcivil.setSelectedItem("");
@@ -536,19 +607,19 @@ public class employee {
 
 					if (rs.next() == true) {
 
-						Object civilite = rs.getObject(1);
+						String civilite = rs.getString(1);
 						String nom = rs.getString(2);
 						String prenom = rs.getString(3);
 						String age = rs.getString(4);
 						String telephone = rs.getString(5);
 						String adresse = rs.getString(6);
 						String email = rs.getString(7);
-						Object license = rs.getObject(8);
+						String license = rs.getString(8);
 						String compte_bancaire = Decrypt_Banque(rs.getString(9));
 						String numero_id = rs.getString(10);
 						String salaire = Decrypt_Banque(rs.getString(11));
-						Object poste = rs.getString(12);
-						Object departement = rs.getString(13);
+						String poste = rs.getString(12);
+						String departement = rs.getString(13);
 						String lieu = rs.getString(14);
 
 						dropcivil.setSelectedItem(civilite);
@@ -600,23 +671,23 @@ public class employee {
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				String nom, prenom, age, telephone, adresse, email, compte_bancaire, numero_id, salaire, id_emp;
-				Object civilite, license, poste, departement, lieu;
+				String  civilite, nom, prenom, age, telephone, adresse, email,license, compte_bancaire, numero_id, salaire, poste, departement, lieu ,id_emp;
+			 
 
-				civilite = dropcivil.getSelectedItem();
+				civilite = dropcivil.getSelectedItem().toString();
 				nom = txtnom.getText();
 				prenom = txtprenom.getText();
 				age = txtage.getText();
 				telephone = txttelephone.getText();
 				adresse = txtadresse.getText();
 				email = txtemail.getText();
-				license = droplicense.getSelectedItem();
+				license = droplicense.getSelectedItem().toString();
 				compte_bancaire = Encrpyt_Banque(txtcompte_bancaire.getText());
 				numero_id = txtnumero_id.getText();
 				salaire = Encrpyt_Banque(txtsalaire.getText());
-				poste = dropposte.getSelectedItem();
-				departement = dropdept.getSelectedItem();
-				lieu = droplieu.getSelectedItem();
+				poste = dropposte.getSelectedItem().toString();
+				departement = dropdept.getSelectedItem().toString();
+				lieu = droplieu.getSelectedItem().toString();
 				id_emp = txtid_emp.getText();
 
 				try {
@@ -629,16 +700,17 @@ public class employee {
 					pst.setString(5, telephone);
 					pst.setString(6, adresse);
 					pst.setString(7, email);
-					pst.setString(8, (String) license);
+					pst.setString(8, license);
 					pst.setString(9, compte_bancaire);
 					pst.setString(10, numero_id);
 					pst.setString(11, salaire);
-					pst.setString(12, (String) poste);
-					pst.setString(13, (String) departement);
-					pst.setString(14, (String) lieu);
+					pst.setString(12, poste);
+					pst.setString(13, departement);
+					pst.setString(14, lieu);
 					pst.setString(15, id_emp);
 					pst.executeUpdate();
 					JOptionPane.showMessageDialog(null, "Record Updated!");
+					
 					table_load();
 
 					dropcivil.setSelectedItem("");
@@ -680,6 +752,7 @@ public class employee {
 					pst.setString(1, id_emp);
 					pst.executeUpdate();
 					JOptionPane.showMessageDialog(null, "Record Deleted!");
+					count_load();
 					table_load();
 
 					txtnom.setText("");
@@ -702,5 +775,16 @@ public class employee {
 			}
 		});
 		frame.getContentPane().add(btnDelete);
+
+		lblNoEmploy = new JLabel();
+		lblNoEmploy.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblNoEmploy.setBounds(1655, 933, 235, 33);
+		frame.getContentPane().add(lblNoEmploy);
 	}
 }
+
+
+
+
+
+

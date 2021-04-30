@@ -122,7 +122,7 @@ public class departement {
 		dropnom.setBounds(214, 69, 209, 27);
 		panel.add(dropnom);
 		
-		dropnom.addItem(" ");
+		dropnom.addItem("");
 		dropnom.addItem("Administration");
 		dropnom.addItem("Comptabilite");
 		dropnom.addItem("Vente	");
@@ -132,7 +132,7 @@ public class departement {
 		dropadd.setBounds(214, 135, 209, 27);
 		panel.add(dropadd);
 		
-		dropadd.addItem(" ");
+		dropadd.addItem("");
 		dropadd.addItem("Siege Social");		
 		dropadd.addItem("Port Louis");
 		dropadd.addItem("Baie du Tombeau");
@@ -145,18 +145,26 @@ public class departement {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{			
-				Object nom_dept,adresse_dept;
+				String nom_dept,adresse_dept;
 				
-				nom_dept = dropnom.getSelectedItem();
-				adresse_dept = dropadd.getSelectedItem();
+				nom_dept = dropnom.getSelectedItem().toString();
+				adresse_dept = dropadd.getSelectedItem().toString();
+				
+				if (nom_dept.equals("")) {
+					JOptionPane.showMessageDialog(null, "L`insertion du nom invalide");
+				}
+
+				if (adresse_dept.equals("")) {
+					JOptionPane.showMessageDialog(null, "L`insertion de l'adresse invalide");
+				}
 
 							
 				 try {
 					 
-					 
+				if (!nom_dept.equals("") && !adresse_dept.equals("")) {
 					pst = con.prepareStatement("insert into rh_departement(nom_dept,adresse_dept)values(?,?)");
-					pst.setString(1, (String) nom_dept);
-					pst.setString(2, (String) adresse_dept);
+					pst.setString(1, nom_dept);
+					pst.setString(2, adresse_dept);
 					pst.executeUpdate();
 					JOptionPane.showMessageDialog(null, "Record Added!");
 					table_load();
@@ -164,6 +172,7 @@ public class departement {
 						           
 					dropnom.setSelectedItem("");
 					dropadd.setSelectedItem("");
+				}
 //					txtnom.requestFocus();
 				   }
 			 
@@ -191,6 +200,7 @@ public class departement {
 			public void actionPerformed(ActionEvent e) {
 				dropnom.setSelectedItem("");
 				dropadd.setSelectedItem("");
+				
 //				txtnom.requestFocus();
 			}
 		});
@@ -230,8 +240,8 @@ public class departement {
 			            if(rs.next()==true)
 			            {
 			              
-			                Object nom_dept = rs.getString(1);
-			                Object adresse_dept = rs.getString(2);
+			                String nom_dept = rs.getString(1);
+			                String adresse_dept = rs.getString(2);
 		
 			                
 			                dropnom.setSelectedItem(nom_dept);
@@ -263,16 +273,16 @@ public class departement {
 			public void actionPerformed(ActionEvent e) {
 				
 				String id_dept;
-				Object nom_dept,adresse_dept;
+				String nom_dept,adresse_dept;
 				
-				nom_dept = dropnom.getSelectedItem();
-				adresse_dept = dropadd.getSelectedItem();
+				nom_dept = dropnom.getSelectedItem().toString();
+				adresse_dept = dropadd.getSelectedItem().toString();
 				id_dept  = txtid_dept.getText();
 				
 				 try {
 						pst = con.prepareStatement("update rh_departement set nom_dept= ?,adresse_dept=? where id_dept =?");
-						pst.setString(1, (String) nom_dept);
-			            pst.setString(2, (String) adresse_dept);
+						pst.setString(1,  nom_dept);
+			            pst.setString(2,  adresse_dept);
 			            pst.setString(3, id_dept);
 			            pst.executeUpdate();
 			            JOptionPane.showMessageDialog(null, "Record Updated!");
