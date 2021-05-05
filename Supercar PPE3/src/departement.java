@@ -20,6 +20,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JComboBox;
 
+/**
+ * 
+ * @author disch
+ *
+ */
+
+
 public class departement {
 
 	private JFrame frame;
@@ -29,11 +36,11 @@ public class departement {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String login) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					departement window = new departement();
+					departement window = new departement(login);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -45,8 +52,8 @@ public class departement {
 	/**
 	 * Create the application.
 	 */
-	public departement() {
-		initialize();
+	public departement(String login) {
+		initialize(login);
 		Connect();
 		table_load();
 	}
@@ -55,6 +62,7 @@ public class departement {
 	PreparedStatement pst;
 	ResultSet rs;
 
+	// Connection base de donnee	
  
 	 public void Connect()
 	    {
@@ -91,7 +99,10 @@ public class departement {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(String login) {
+		AdminAccount account = new AdminAccount();
+		account.DatabaseConnexion(login, null, null, frame);
+		System.out.print(account.getId());
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1384, 893);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -139,12 +150,16 @@ public class departement {
 		dropadd.addItem("Phoenix");
 		dropadd.addItem("Plaisance");
 		
+		// Sauvegarder les donnees
 		
 		JButton btnNewButton = new JButton("Sauvegarder");
 		btnNewButton.setBounds(40, 645, 107, 50);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{			
+				
+				// Controle de saisie sur les champs
+				
 				String nom_dept,adresse_dept;
 				
 				nom_dept = dropnom.getSelectedItem().toString();
@@ -161,7 +176,7 @@ public class departement {
 							
 				 try {
 					 
-				if (!nom_dept.equals("") && !adresse_dept.equals("")) {
+				if (!nom_dept.equals("") && !adresse_dept.equals("") && account.getAccountType().contains("RH")) {
 					pst = con.prepareStatement("insert into rh_departement(nom_dept,adresse_dept)values(?,?)");
 					pst.setString(1, nom_dept);
 					pst.setString(2, adresse_dept);
@@ -173,7 +188,11 @@ public class departement {
 					dropnom.setSelectedItem("");
 					dropadd.setSelectedItem("");
 				}
-//					txtnom.requestFocus();
+				else {
+					JOptionPane.showMessageDialog(null, "Vous n'avez pas les privileges !");
+				}
+				
+
 				   }
 			 
 				catch (SQLException e1) 
@@ -189,7 +208,13 @@ public class departement {
 		btnExit.setBounds(193, 740, 107, 50);
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				int dialogButton = JOptionPane.YES_NO_OPTION;
+				int dialogResult = JOptionPane.showConfirmDialog(null, "Souhaitez-vous quitter la page 'Departement'?", "Warning",
+						dialogButton);
+				if (dialogResult == JOptionPane.YES_OPTION) {
+				departement.this.frame.setVisible(false);
+				login_connection.main(login);
+				}
 			}
 		});
 		frame.getContentPane().add(btnExit);
@@ -201,7 +226,6 @@ public class departement {
 				dropnom.setSelectedItem("");
 				dropadd.setSelectedItem("");
 				
-//				txtnom.requestFocus();
 			}
 		});
 		frame.getContentPane().add(btnClear);
@@ -230,6 +254,8 @@ public class departement {
 			public void keyReleased(KeyEvent e) {
 				
 				 try {
+					 
+					 	// La bar de recherche au niveau ID	
 			          
 			            String id = txtid_dept.getText();
 
@@ -267,6 +293,8 @@ public class departement {
 		txtid_dept.setColumns(10);
 		panel_1.add(txtid_dept);
 		
+		
+		
 		JButton btnUpdate = new JButton("Modifier");
 		btnUpdate.setBounds(193, 645, 107, 50);
 		btnUpdate.addActionListener(new ActionListener() {
@@ -280,6 +308,9 @@ public class departement {
 				id_dept  = txtid_dept.getText();
 				
 				 try {
+					 	
+					 if (account.getAccountType().contains("RH")) {
+					 	
 						pst = con.prepareStatement("update rh_departement set nom_dept= ?,adresse_dept=? where id_dept =?");
 						pst.setString(1,  nom_dept);
 			            pst.setString(2,  adresse_dept);
@@ -290,15 +321,20 @@ public class departement {
 			           
 			            dropnom.setSelectedItem("");
 						dropadd.setSelectedItem("");
-//			            txtnom.requestFocus();
+
+					}else{
+						JOptionPane.showMessageDialog(null, "Vous n'avez pas les privileges !");
 					}
 
+				 }
 		            catch (SQLException e1) {
 						e1.printStackTrace();
 					}
 			}
 		});
 		frame.getContentPane().add(btnUpdate);
+		
+		// L'Option Supprimer des donnees 
 		
 		JButton btnDelete = new JButton("Supprimer");
 		btnDelete.setBounds(353, 645, 107, 50);
@@ -309,6 +345,9 @@ public class departement {
 			id_dept  = txtid_dept.getText();
 			
 			 try {
+				 
+				 if (account.getAccountType().contains("RH")) {
+				 
 					pst = con.prepareStatement("delete from rh_departement where id_dept =?");
 			
 		            pst.setString(1, id_dept);
@@ -316,9 +355,12 @@ public class departement {
 		            JOptionPane.showMessageDialog(null, "Record Deleted!");
 		            table_load();
 		         
-//		            txtnom.requestFocus();
+
 				}
-		
+				 else{
+						JOptionPane.showMessageDialog(null, "Vous n'avez pas les privileges !");
+				}
+			 }
 		        catch (SQLException e1) {
 					
 					e1.printStackTrace();

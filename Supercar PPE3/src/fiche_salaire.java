@@ -34,6 +34,14 @@ import javax.swing.UIManager;
 import java.awt.Color;
 import javax.swing.JComboBox;
 
+
+/**
+ * 
+ * @author disch
+ *
+ */
+
+
 public class fiche_salaire {
 
 	private JFrame frame;
@@ -44,11 +52,11 @@ public class fiche_salaire {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String login) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					fiche_salaire window = new fiche_salaire();
+					fiche_salaire window = new fiche_salaire(login);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -60,8 +68,8 @@ public class fiche_salaire {
 	/**
 	 * Create the application.
 	 */
-	public fiche_salaire() {
-		initialize();
+	public fiche_salaire(String login) {
+		initialize(login);
 		Connect();
 		table_load();
 	}
@@ -78,6 +86,10 @@ public class fiche_salaire {
 	private JTextField txtcommission;
 	private String date = "";
 
+	/**
+	 *  Connection avec la base de donnees
+	 */
+	
 	public void Connect() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -88,6 +100,12 @@ public class fiche_salaire {
 
 		}
 	}
+	
+	/**
+	 *  methode Decrypt_Banque pour la partie salaire et numero compte
+	 * @param banque
+	 * @return
+	 */
 
 	public String Decrypt_Banque(String banque) {
 		SecretKey key;
@@ -101,6 +119,12 @@ public class fiche_salaire {
 		return banque;
 	}
 
+	/**
+	 *  methode Encrypt_Banque pour la partie salaire et numero compte
+	 * @param banque
+	 * @return
+	 */
+	
 	public String Encrpyt_Banque(String banque) {
 		SecretKey key;
 		try {
@@ -112,6 +136,10 @@ public class fiche_salaire {
 
 		return banque;
 	}
+	
+	/**
+	 *  Affichage de la table employee pour effectuer les salaires des employees
+	 */
 
 	public void table_load() {
 		try {
@@ -119,15 +147,19 @@ public class fiche_salaire {
 					"select id_emp,nom,prenom,email,numero_id,compte_bancaire,salaire,poste,departement from rh_employee");
 			rs = pst.executeQuery();
 			table.setModel(DbUtils.resultSetToTableModel(rs));
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		try {
-			pst = con.prepareStatement("select  id_emp,nom,prenom,email,numero_id,compte_bancaire,salaire,poste,departement,CURDATE() as date from rh_employee");
+			pst = con.prepareStatement(
+					"select  id_emp,nom,prenom,email,numero_id,compte_bancaire,salaire,poste,departement,CURDATE() as date from rh_employee");
 			rs = pst.executeQuery();
-
-			DefaultTableModel tableModel = new DefaultTableModel(new Object[][] {}, new String[] { "ID", "Nom",
-					"Prenom", "Email", "Compte Bancaire", "Numero ID", "salaire", "Poste", "Departement","commission" });
+			
+			DefaultTableModel tableModel = new DefaultTableModel(new Object[][] {},
+					new String[] { "ID", "Nom", "Prenom", "Email", "Compte Bancaire", "Numero ID", "Salaire", "Poste",
+							"Departement", "Commission" });
+			
 			while (rs.next()) {
 				String id_emp = rs.getString("id_emp");
 
@@ -139,24 +171,41 @@ public class fiche_salaire {
 				String salaire = Decrypt_Banque(rs.getString("salaire"));
 				String poste = rs.getString("poste");
 				String departement = rs.getString("departement");
-				String commission="";
+				String commission = "";
 				date = rs.getString("date");
 				if (departement.contains("Vente")) {
-					String test  = "SELECT SUM(b.quantite) * 3500 as 'test' FROM rh_employee AS a, vendeur_commande AS b WHERE a.id_emp = b.id_emp  AND statue = 'Termine'  AND a.departement = 'Vente' AND a.id_emp = ? AND MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())";
+					String test = "SELECT SUM(b.quantite) * 3500 as 'test' FROM rh_employee AS a, vendeur_commande AS b WHERE a.id_emp = b.id_emp  AND statue = 'Termine'  AND a.departement = 'Vente' AND a.id_emp = ? AND MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())";
 					pst = con.prepareStatement(test);
 					pst.setString(1, id_emp);
 					ResultSet rsVente = pst.executeQuery();
 					while (rsVente.next()) {
-						commission = String.valueOf(rsVente.getInt(1));					}
-				}else {
+						commission = String.valueOf(rsVente.getInt(1));
+					}
+				} else {
 					commission = "0";
 				}
 
-				String[] data = { id_emp, nom, prenom, email, compte_bancaire, numero_id, salaire, poste, departement,commission };
+				String[] data = { id_emp, nom, prenom, email, compte_bancaire, numero_id, salaire, poste, departement, commission };
 				tableModel.addRow(data);
 
 			}
 			table.setModel(tableModel);
+			
+			/**
+			 *  controle de largeur colone 
+			 */
+			
+			table.getColumnModel().getColumn(0).setPreferredWidth(75); // ID
+			table.getColumnModel().getColumn(1).setPreferredWidth(100);  // Nom
+			table.getColumnModel().getColumn(2).setPreferredWidth(100); // Prenom
+			table.getColumnModel().getColumn(3).setPreferredWidth(200); // Email
+			table.getColumnModel().getColumn(4).setPreferredWidth(150); // Compte Bancaire
+			table.getColumnModel().getColumn(5).setPreferredWidth(150); // Numero ID
+			table.getColumnModel().getColumn(6).setPreferredWidth(100); // Salaire
+			table.getColumnModel().getColumn(7).setPreferredWidth(100); // Poste
+			table.getColumnModel().getColumn(8).setPreferredWidth(100); // Departement
+			table.getColumnModel().getColumn(9).setPreferredWidth(100); // Commission
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -165,7 +214,10 @@ public class fiche_salaire {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(String login) {
+		AdminAccount account = new AdminAccount();
+		account.DatabaseConnexion(login, null, null, frame);
+		System.out.print(account.getId());
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1591, 899);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -271,8 +323,7 @@ public class fiche_salaire {
 		dropposte.addItem("Salarié");
 		dropposte.addItem("Manager");
 		dropposte.addItem("Admin");
-		
-	
+
 		JComboBox<String> dropdept = new JComboBox<String>();
 		dropdept.setBounds(160, 428, 211, 26);
 		panel.add(dropdept);
@@ -287,7 +338,13 @@ public class fiche_salaire {
 		btnExit.setBounds(975, 766, 107, 50);
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				int dialogButton = JOptionPane.YES_NO_OPTION;
+				int dialogResult = JOptionPane.showConfirmDialog(null, "Souhaitez-vous quitter la page 'Fiche Salaire'?", "Warning",
+						dialogButton);
+				if (dialogResult == JOptionPane.YES_OPTION) {
+				fiche_salaire.this.frame.setVisible(false);
+				login_connection.main(login);
+				}
 			}
 		});
 		frame.getContentPane().add(btnExit);
@@ -316,6 +373,8 @@ public class fiche_salaire {
 
 		table = new JTable();
 		scrollPane.setViewportView(table);
+		
+		// Option generer PDF 
 
 		JButton btnsalaire = new JButton("PDF Salaire");
 		btnsalaire.setBounds(447, 766, 107, 50);
@@ -323,7 +382,7 @@ public class fiche_salaire {
 			public void actionPerformed(ActionEvent e) {
 
 				String id, nom, prenom, email, numero_id, compte_bancaire, salaire, poste, departement, commission;
-			
+
 				id = textField.getText();
 				nom = txtnom.getText();
 				prenom = txtprenom.getText();
@@ -334,11 +393,13 @@ public class fiche_salaire {
 				poste = dropposte.getSelectedItem().toString();
 				departement = dropdept.getSelectedItem().toString();
 				commission = txtcommission.getText();
-				
-				
-			
+
 
 				try {
+					
+					/**
+					 *  Controle de saisie sur les champs
+					 */
 
 					final String NOM_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
 
@@ -383,7 +444,7 @@ public class fiche_salaire {
 					if (BANCAIRE_PATTERN.matcher(Decrypt_Banque(compte_bancaire)).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion du compte bancaire n`est pas bon");
 					}
-					
+
 					if (NUMID_PATTERN.matcher(numero_id).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion du numero identite n`est pas bon");
 					}
@@ -391,7 +452,7 @@ public class fiche_salaire {
 					if (SALAIRE_PATTERN.matcher(Decrypt_Banque(salaire)).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion du salaire n`est pas bon");
 					}
-					
+
 					if (poste.equals("")) {
 						JOptionPane.showMessageDialog(null, "L`insertion du poste invalide");
 					}
@@ -403,21 +464,22 @@ public class fiche_salaire {
 					if (COMMISSION_PATTERN.matcher(commission).matches() == false) {
 						JOptionPane.showMessageDialog(null, "L`insertion de la commission n`est pas bon");
 					}
-					
+
 					int val1 = Integer.parseInt(txtsalaire.getText());
 					int val2 = Integer.parseInt(txtcommission.getText());
-					
+
 					int total = val1 + val2;
-			
 
 					if (NOM_PATTERN.matcher(nom).matches() && PRENOM_PATTERN.matcher(prenom).matches()
 							&& EMAIL_PATTERN.matcher(email).matches()
 							&& BANCAIRE_PATTERN.matcher(Decrypt_Banque(compte_bancaire)).matches()
 							&& NUMID_PATTERN.matcher(numero_id).matches()
-							&& SALAIRE_PATTERN.matcher(Decrypt_Banque(salaire)).matches()
-							&& !poste.equals("")
-							&& !departement.equals("")
-							&& COMMISSION_PATTERN.matcher(commission).matches()) {
+							&& SALAIRE_PATTERN.matcher(Decrypt_Banque(salaire)).matches() && !poste.equals("")
+							&& !departement.equals("") && COMMISSION_PATTERN.matcher(commission).matches()) {
+						
+						/**
+						 *  insertion dans la table fiche salaire
+						 */
 
 						pst = con.prepareStatement(
 								"insert into fiche_salaire(nom,prenom,email,numero_id,compte_bancaire,salaire,poste,departement,commission)values(?,?,?,?,?,?,?,?,?)");
@@ -445,12 +507,12 @@ public class fiche_salaire {
 						departement = dropdept.getSelectedItem().toString();
 						commission = txtcommission.getText();
 						
-						
-						
-						
+						/**
+						 *  Gernerer une fiche salaire pour la paye des employees
+						 */
 
 						JFileChooser dialog = new JFileChooser();
-						dialog.setSelectedFile(new File(id+"_"+prenom+"_"+nom + "_FicheSalaire" + ".pdf"));
+						dialog.setSelectedFile(new File(id + "_" + prenom + "_" + nom + "_FicheSalaire" + ".pdf"));
 						int dialogResult = dialog.showSaveDialog(null);
 						if (dialogResult == JFileChooser.APPROVE_OPTION) {
 							String filePath = dialog.getSelectedFile().getPath();
@@ -460,20 +522,19 @@ public class fiche_salaire {
 							PdfWriter myWriter = PdfWriter.getInstance(myDoc, new FileOutputStream(filePath));
 							myDoc.open();
 
-							myDoc.add(new Paragraph("FICHE SALAIRE", FontFactory.getFont(FontFactory.TIMES_BOLD, 20)));
+							myDoc.add(new Paragraph("FICHE SALAIRE", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 20)));
 
 							myDoc.add(new Paragraph(" ", FontFactory.getFont(FontFactory.HELVETICA, 10)));
 
 							myDoc.add(new Paragraph("Detail de l'employée",
-									FontFactory.getFont(FontFactory.HELVETICA_BOLD, 17))); 
-							
+									FontFactory.getFont(FontFactory.HELVETICA_BOLD, 17)));
+
 							myDoc.add(new Paragraph(" ", FontFactory.getFont(FontFactory.HELVETICA, 20)));
-							
-							myDoc.add(new Paragraph("Date de la fiche salaire : "+date,
+
+							myDoc.add(new Paragraph("Date de la fiche salaire : " + date,
 									FontFactory.getFont(FontFactory.HELVETICA, 15)));
-							
-							myDoc.add(
-									new Paragraph("Nom: " + nom + " ", FontFactory.getFont(FontFactory.HELVETICA, 15)));
+
+							myDoc.add(new Paragraph("Nom: " + nom + " ", FontFactory.getFont(FontFactory.HELVETICA, 15)));
 							myDoc.add(new Paragraph("Prenom: " + prenom + " ",
 									FontFactory.getFont(FontFactory.HELVETICA, 15)));
 							myDoc.add(new Paragraph("Email: " + email + " ",
@@ -492,7 +553,7 @@ public class fiche_salaire {
 									FontFactory.getFont(FontFactory.HELVETICA, 15)));
 							myDoc.add(new Paragraph("Totale Salaire: " + total + " ",
 									FontFactory.getFont(FontFactory.HELVETICA, 15)));
-						
+
 							myDoc.close();
 							JOptionPane.showMessageDialog(null, "PDF Valider");
 
@@ -508,7 +569,7 @@ public class fiche_salaire {
 							txtnom.requestFocus();
 						}
 					}
-				}catch (Exception e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 
@@ -530,6 +591,8 @@ public class fiche_salaire {
 		textField = new JTextField();
 		textField.addKeyListener(new KeyAdapter() {
 
+			// Recherche au niveau de l'id pour un employee specifique
+			
 			@Override
 			public void keyReleased(KeyEvent e) {
 				try {
@@ -551,20 +614,24 @@ public class fiche_salaire {
 						String salaire = Decrypt_Banque(rs.getString(6));
 						String poste = rs.getString(7);
 						String departement = rs.getString(8);
-						String commission="";
+						String commission = "";
 						
+						/**
+						 *  Une requete pour faire la jointure avec la table vendeur commission pour recevoir les commissions des vendeurs specifiques
+						 */
+
 						if (departement.contains("Vente")) {
-							String test  = "SELECT SUM(b.quantite) * 3500 FROM rh_employee AS a, vendeur_commande AS b WHERE a.id_emp = b.id_emp  AND statue = 'Termine'  AND a.departement = 'Vente' AND a.id_emp = ? AND MONTH(date) = MONTH(CURRENT_DATE())\r\n" + 
-									"AND YEAR(date) = YEAR(CURRENT_DATE())";
+							String test = "SELECT SUM(b.quantite) * 3500 FROM rh_employee AS a, vendeur_commande AS b WHERE a.id_emp = b.id_emp  AND statue = 'Termine'  AND a.departement = 'Vente' AND a.id_emp = ? AND MONTH(date) = MONTH(CURRENT_DATE())\r\n"
+									+ "AND YEAR(date) = YEAR(CURRENT_DATE())";
 							pst = con.prepareStatement(test);
 							pst.setString(1, id);
 							ResultSet rsVente = pst.executeQuery();
 							while (rsVente.next()) {
-								commission = String.valueOf(rsVente.getInt(1));					}
-						}else {
+								commission = String.valueOf(rsVente.getInt(1));
+							}
+						} else {
 							commission = "0";
 						}
-						
 
 						txtnom.setText(nom);
 						txtprenom.setText(prenom);
@@ -573,7 +640,7 @@ public class fiche_salaire {
 						txtcompte_bancaire.setText(compte_bancaire);
 						txtsalaire.setText(salaire);
 						txtcommission.setText(commission);
-						
+
 						dropposte.setSelectedItem(poste);
 						dropdept.setSelectedItem(departement);
 					} else {
@@ -606,8 +673,8 @@ public class fiche_salaire {
 			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent arg0) {
 
-				affichage_fsalaire fsalaire = new affichage_fsalaire();
-				fsalaire.ficheSalaire();
+				affichage_fsalaire fsalaire = new affichage_fsalaire(login);
+				fsalaire.ficheSalaire(login);
 
 			}
 		});

@@ -4,10 +4,20 @@ import java.sql.*;
 import javax.crypto.SecretKey;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Font;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+/**
+ * 
+ * @author disch
+ *
+ */
 
 public class affichage_fsalaire {
 
@@ -19,11 +29,11 @@ public class affichage_fsalaire {
 	/**
 	 * Launch the application.
 	 */
-	public static void ficheSalaire() {
+	public static void ficheSalaire(String login) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					affichage_fsalaire window = new affichage_fsalaire();
+					affichage_fsalaire window = new affichage_fsalaire(login);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -35,9 +45,9 @@ public class affichage_fsalaire {
 	/**
 	 * Create the application.
 	 */
-	public affichage_fsalaire() {
+	public affichage_fsalaire(String login) {
 		Connect();
-		initialize();
+		initialize(login);
 		count_load();
 		table_load();
 	}
@@ -45,7 +55,11 @@ public class affichage_fsalaire {
 	Connection con;
 	PreparedStatement pst;
 	ResultSet rs;
+	private JButton btnNewButton;
 
+	/**
+	 *  Connection avec la base de donnee
+	 */
 
  
 	 public void Connect()
@@ -64,6 +78,12 @@ public class affichage_fsalaire {
 	        }
 	    }
 	 
+	/**
+	 *  methode Decrypt_Banque pour la partie salaire et numero compte
+	 * @param banque
+	 * @return
+	 */
+	 
 	  public String Decrypt_Banque(String banque) {
 			SecretKey key;
 			try {
@@ -76,6 +96,12 @@ public class affichage_fsalaire {
 
 			return banque;
 		}
+	  
+	/**
+	 *  methode Encrypt_Banque pour la partie salaire et numero compte
+	 * @param banque
+	 * @return
+	 */
 		
 		public String Encrpyt_Banque(String banque) {
 			SecretKey key;
@@ -89,6 +115,10 @@ public class affichage_fsalaire {
 
 			return banque;
 		}
+		
+		/**
+		 *  Le nombre totale de fiche salaires realisees 
+		 */
 		
 		public void count_load() {
 			count = 0;
@@ -104,6 +134,11 @@ public class affichage_fsalaire {
 			}
 			lblFicheSalaireTotale.setText("Fiche Salaire Totale: "+count);
 		}
+		
+		/**
+		 *  L'affichage de la table salaire + l'option autoincrement pour le mois d'apres pour le nombre de commission realises
+		 */
+		
 
 		public void table_load() {
 			try {
@@ -143,7 +178,10 @@ public class affichage_fsalaire {
 	/**
 	 * Initialise the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(String login) {
+		AdminAccount account = new AdminAccount();
+		account.DatabaseConnexion(login, null, null, frame);
+		System.out.print(account.getId());
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1288, 640);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -165,6 +203,21 @@ public class affichage_fsalaire {
 		lblFicheSalaireTotale.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblFicheSalaireTotale.setBounds(1016, 546, 242, 16);
 		frame.getContentPane().add(lblFicheSalaireTotale);
+		
+		btnNewButton = new JButton("Sortir");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int dialogButton = JOptionPane.YES_NO_OPTION;
+				int dialogResult = JOptionPane.showConfirmDialog(null, "Souhaitez-vous quitter la table 'Affichage salaire'?", "Warning",
+						dialogButton);
+				if (dialogResult == JOptionPane.YES_OPTION) {
+				affichage_fsalaire.this.frame.setVisible(false);
+				login_connection.main(login);
+				}
+			}
+		});
+		btnNewButton.setBounds(609, 545, 97, 25);
+		frame.getContentPane().add(btnNewButton);
 		
 	
 			}

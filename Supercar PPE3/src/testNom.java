@@ -5,6 +5,17 @@ import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
 
+
+/**
+ * Test unitaires au niveau du nom d'une personne + la verification (Regex) 
+ * @author disch
+ *
+ */
+
+/*
+ * class testNom + verification
+ */
+
 class testNom {
 
 	@Test

@@ -21,6 +21,12 @@ import javax.swing.JComboBox;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+ /**
+  * 
+  * @author disch
+  *
+  */
+
 public class Test_Conduite {
 
 	private JFrame frame;
@@ -65,6 +71,8 @@ public class Test_Conduite {
 	private JLabel lblNoTestConduite;
 	private int count = 0;
 
+	// Connection base de donnee
+	
 	public void Connect() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -83,6 +91,10 @@ public class Test_Conduite {
 	public int getCount() {
 		return this.count;
 	}
+	
+	/**
+	 *  Affichage du nombre total de test de conduite  
+	 */
 	
 	public void count_load() {
 		count = 0;
@@ -104,11 +116,34 @@ public class Test_Conduite {
 			pst = con.prepareStatement("select * from test_conduite");
 			rs = pst.executeQuery();
 			table.setModel(DbUtils.resultSetToTableModel(rs));
+			
+			/**
+			 *  controle de largeur colone 
+			 */
+			
+			table.getColumnModel().getColumn(0).setPreferredWidth(75); // ID
+			table.getColumnModel().getColumn(1).setPreferredWidth(100); //Civilite
+			table.getColumnModel().getColumn(2).setPreferredWidth(100);  // Nom
+			table.getColumnModel().getColumn(3).setPreferredWidth(100); // Prenom
+			table.getColumnModel().getColumn(4).setPreferredWidth(100); // Telephone
+			table.getColumnModel().getColumn(5).setPreferredWidth(200); // Email
+			table.getColumnModel().getColumn(6).setPreferredWidth(175); // Voiture
+			table.getColumnModel().getColumn(7).setPreferredWidth(125); // Date
+			table.getColumnModel().getColumn(8).setPreferredWidth(125); // Etat
+						
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
+	
+	/**
+	 *  concatenation pour avoir la description d'une voiture marque + modele
+	 * @param jc
+	 * @return
+	 * @throws SQLException
+	 */
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public JComboBox Test(JComboBox jc) throws SQLException {
 		DefaultComboBoxModel theModel = (DefaultComboBoxModel) jc.getModel();
@@ -117,7 +152,7 @@ public class Test_Conduite {
 		theModel.removeAllElements();
 		theModel.addElement("");
 		while (rs.next()) {
-			theModel.addElement(rs.getString("marque") + " " + rs.getString("model"));
+			theModel.addElement(rs.getString("marque") + " " + rs.getString("modele"));
 		}
 		jc.setModel(theModel);
 		return jc;
@@ -245,6 +280,10 @@ public class Test_Conduite {
 		dropvoiture.setBounds(160, 305, 211, 26);
 		panel.add(dropvoiture);
 		dropvoiture.addItem("");
+		
+		/**
+		 *  Sauvegarder les donnees
+		 */
 
 		JButton btnNewButton = new JButton("Sauvegarder");
 		btnNewButton.setBounds(51, 679, 135, 50);
@@ -262,6 +301,10 @@ public class Test_Conduite {
 				etat = dropetat.getSelectedItem().toString();
 						
 				try {
+					
+					/**
+					 *  Controle de saisie sur les champs
+					 */
 
 					final String NOM_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
 
@@ -415,8 +458,14 @@ public class Test_Conduite {
 			public void keyReleased(KeyEvent e) {
 
 				try {
+					
+					
 
 					String id = txtid_test.getText();
+					
+					 /**
+					  *  La bar de recherche au niveau ID	
+					  */
 
 					pst = con.prepareStatement(
 							"select civilite,nom,prenom,telephone,email,voiture,date,etat from test_conduite where id_test = ?");
@@ -465,6 +514,10 @@ public class Test_Conduite {
 		txtid_test.setBounds(145, 22, 1154, 22);
 		txtid_test.setColumns(10);
 		panel_1.add(txtid_test);
+		
+		/**
+		 *  L'option modification de donnee
+		 */
 
 		JButton btnUpdate = new JButton("Modifier");
 		btnUpdate.setBounds(242, 679, 128, 50);
@@ -487,7 +540,71 @@ public class Test_Conduite {
 				
 				try {
 					
-					if (account.getAccountType() == "manager") {
+					/**
+					 *  Controle de saisie sur les champs
+					 */
+					
+
+					final String NOM_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
+
+					final Pattern NOM_PATTERN = Pattern.compile(NOM_REGEX);
+
+					final String PRENOM_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
+
+					final Pattern PRENOM_PATTERN = Pattern.compile(PRENOM_REGEX);
+
+					final String TELEPHONE_REGEX = "^[0-9]{8}$";
+
+					final Pattern TELEPHONE_PATTERN = Pattern.compile(TELEPHONE_REGEX);
+
+					final String EMAIL_REGEX = "^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,3})+$";
+
+					final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
+
+					final String DATE_REGEX = "^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d$";
+
+					final Pattern DATE_PATTERN = Pattern.compile(DATE_REGEX);
+
+					if (civilite.equals("")) {
+						JOptionPane.showMessageDialog(null, "L`insertion civilite invalide");
+					}
+					
+					if (NOM_PATTERN.matcher(nom).matches() == false) {
+						JOptionPane.showMessageDialog(null, "L`insertion du nom n`est pas bon");
+					}
+
+					if (PRENOM_PATTERN.matcher(prenom).matches() == false) {
+						JOptionPane.showMessageDialog(null, "L`insertion du prenom n`est pas bon");
+					}
+
+					if (TELEPHONE_PATTERN.matcher(telephone).matches() == false) {
+						JOptionPane.showMessageDialog(null, "L`insertion du numero telephone n`est pas bon");
+					}
+
+					if (EMAIL_PATTERN.matcher(email).matches() == false) {
+						JOptionPane.showMessageDialog(null, "L`insertion de l'email n`est pas bon");
+					}
+					
+					if (voiture.equals("")) {
+						JOptionPane.showMessageDialog(null, "L`insertion de la voiture invalide");
+					}
+
+
+					if (DATE_PATTERN.matcher(date).matches() == false) {
+						JOptionPane.showMessageDialog(null, "L`insertion de la date n`est pas bon (dd/mm/yy)");
+					}
+					
+					if (etat.equals("")) {
+						JOptionPane.showMessageDialog(null, "L`insertion de l'etat invalide");
+					}
+					
+
+					if (!civilite.equals("") && NOM_PATTERN.matcher(nom).matches() && PRENOM_PATTERN.matcher(prenom).matches()
+							&& TELEPHONE_PATTERN.matcher(telephone).matches() && EMAIL_PATTERN.matcher(email).matches()
+							&& DATE_PATTERN.matcher(date).matches()
+							&& !etat.equals("") && !voiture.equals("")) {
+					
+				
 
 					pst = con.prepareStatement(
 							"update test_conduite set civilite=?,nom=?,prenom=?,telephone=?,email=?,voiture=?,date=?,etat=? where id_test =?");
@@ -515,10 +632,9 @@ public class Test_Conduite {
 
 					txtnom.requestFocus();
 				
-				}else {
-					JOptionPane.showMessageDialog(null, "Vous n'avez pas les privileges!");
-				}
-
+				
+					}
+					
 				}catch (SQLException e1) {
 					e1.printStackTrace();
 				}
@@ -526,7 +642,9 @@ public class Test_Conduite {
 		});
 		frame.getContentPane().add(btnUpdate);
 		
-
+		/**
+		 *  l'option supprimer les donnees
+		 */
 
 		JButton btnDelete = new JButton("Supprimer");
 		btnDelete.setBounds(435, 679, 135, 50);
