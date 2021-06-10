@@ -19,7 +19,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JComboBox;
 
-
 /**
  * 
  * @author disch
@@ -73,9 +72,9 @@ public class employee {
 	private JTextField txtsalaire;
 	private JLabel lblNoEmploy;
 	private int count = 0;
-	
+
 	/**
-	 *  Connection base de donnee	
+	 * Connection base de donnee
 	 */
 
 	public void Connect() {
@@ -97,13 +96,12 @@ public class employee {
 		return this.count;
 	}
 
-	
-    /**
-     *  Decryptage Blowfish + cle
-     * @param banque
-     * @return
-     */
-	
+	/**
+	 * Decryptage Blowfish + cle
+	 * 
+	 * @param banque
+	 * @return
+	 */
 	public String Decrypt_Banque(String banque) {
 		if (account.getAccountType().contains("RH")) {
 			SecretKey key;
@@ -117,13 +115,13 @@ public class employee {
 		return banque;
 	}
 
-	
 	/**
-	 *  Encrypt Blowfish + cle
+	 * Encrypt Blowfish + cle
+	 * 
 	 * @param banque
 	 * @return
 	 */
-	
+
 	public String Encrpyt_Banque(String banque) {
 		SecretKey key;
 		try {
@@ -135,9 +133,9 @@ public class employee {
 
 		return banque;
 	}
-	
+
 	/**
-	 *  Affichage du nombre total d'employee   	
+	 * Affichage du nombre total d'employee
 	 */
 
 	public void count_load() {
@@ -157,9 +155,9 @@ public class employee {
 	}
 
 	/**
-	 *  Affichage de la table 	
+	 * Affichage de la table
 	 */
-	
+
 	public void table_load() {
 		try {
 			pst = con.prepareStatement("select * from rh_employee");
@@ -194,9 +192,9 @@ public class employee {
 			table.setModel(tableModel);
 
 			/**
-			 *  controle de largeur colone 
+			 * controle de largeur colone
 			 */
-			
+
 			table.getColumnModel().getColumn(0).setPreferredWidth(75); // ID
 			table.getColumnModel().getColumn(1).setPreferredWidth(100); // Civilite
 			table.getColumnModel().getColumn(2).setPreferredWidth(100); // Nom
@@ -420,9 +418,9 @@ public class employee {
 		droplieu.addItem("Baie du Tombeau");
 		droplieu.addItem("Phoenix");
 		droplieu.addItem("Plaisance");
-		
+
 		/**
-		 *  Sauvegarder les donnees
+		 * Sauvegarder les donnees
 		 */
 
 		JButton btnNewButton = new JButton("Sauvegarder");
@@ -448,9 +446,9 @@ public class employee {
 				lieu = droplieu.getSelectedItem().toString();
 
 				try {
-					
+
 					/**
-					 *  Controle de saisie sur les champs
+					 * Controle de saisie sur les champs
 					 */
 
 					final String NOM_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
@@ -544,9 +542,9 @@ public class employee {
 					if (lieu.equals("")) {
 						JOptionPane.showMessageDialog(null, "L`insertion du lieu invalide");
 					}
-					
+
 					/**
-					 *  Option privilege que pour la partie RH 
+					 * Option privilege que pour la partie RH
 					 */
 
 					if (!civilite.equals("") && NOM_PATTERN.matcher(nom).matches()
@@ -557,46 +555,48 @@ public class employee {
 							&& BANCAIRE_PATTERN.matcher(Decrypt_Banque(compte_bancaire)).matches()
 							&& NUMID_PATTERN.matcher(numero_id).matches()
 							&& SALAIRE_PATTERN.matcher(Decrypt_Banque(salaire)).matches() && !poste.equals("")
-							&& !departement.equals("") && !lieu.equals("") && account.getAccountType().contains("RH")) {
+							&& !departement.equals("") && !lieu.equals("")) {
 
-						pst = con.prepareStatement(
-								"insert into rh_employee(civilite,nom,prenom,age,telephone,adresse,email,license,compte_bancaire,numero_id,salaire,poste,departement,lieu) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-						pst.setString(1, civilite);
-						pst.setString(2, nom);
-						pst.setString(3, prenom);
-						pst.setString(4, age);
-						pst.setString(5, telephone);
-						pst.setString(6, adresse);
-						pst.setString(7, email);
-						pst.setString(8, license);
-						pst.setString(9, compte_bancaire);
-						pst.setString(10, numero_id);
-						pst.setString(11, salaire);
-						pst.setString(12, poste);
-						pst.setString(13, departement);
-						pst.setString(14, lieu);
-						pst.executeUpdate();
-						JOptionPane.showMessageDialog(null, "Record Added!");
-						count_load();
-						table_load();
+						if (account.getAccountType().contains("RH")) {
+							pst = con.prepareStatement(
+									"insert into rh_employee(civilite,nom,prenom,age,telephone,adresse,email,license,compte_bancaire,numero_id,salaire,poste,departement,lieu) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+							pst.setString(1, civilite);
+							pst.setString(2, nom);
+							pst.setString(3, prenom);
+							pst.setString(4, age);
+							pst.setString(5, telephone);
+							pst.setString(6, adresse);
+							pst.setString(7, email);
+							pst.setString(8, license);
+							pst.setString(9, compte_bancaire);
+							pst.setString(10, numero_id);
+							pst.setString(11, salaire);
+							pst.setString(12, poste);
+							pst.setString(13, departement);
+							pst.setString(14, lieu);
+							pst.executeUpdate();
+							JOptionPane.showMessageDialog(null, "Record Added!");
+							count_load();
+							table_load();
 
-						dropcivil.setSelectedItem("");
-						txtnom.setText("");
-						txtprenom.setText("");
-						txtage.setText("");
-						txttelephone.setText("");
-						txtadresse.setText("");
-						txtemail.setText("");
-						droplicense.setSelectedItem("");
-						txtcompte_bancaire.setText("");
-						txtnumero_id.setText("");
-						txtsalaire.setText("");
-						dropposte.setSelectedItem("");
-						dropdept.setSelectedItem("");
-						droplieu.setSelectedItem("");
-						txtnom.requestFocus();
-					} else {
-						JOptionPane.showMessageDialog(null, "Vous n'avez pas les privileges !");
+							dropcivil.setSelectedItem("");
+							txtnom.setText("");
+							txtprenom.setText("");
+							txtage.setText("");
+							txttelephone.setText("");
+							txtadresse.setText("");
+							txtemail.setText("");
+							droplicense.setSelectedItem("");
+							txtcompte_bancaire.setText("");
+							txtnumero_id.setText("");
+							txtsalaire.setText("");
+							dropposte.setSelectedItem("");
+							dropdept.setSelectedItem("");
+							droplieu.setSelectedItem("");
+							txtnom.requestFocus();
+						} else {
+							JOptionPane.showMessageDialog(null, "Vous n'avez pas les privileges !");
+						}
 					}
 				}
 
@@ -668,10 +668,10 @@ public class employee {
 		txtid_emp.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				
-            /**
-             *  La bar de recherche au niveau ID				
-             */
+
+				/**
+				 * La bar de recherche au niveau ID
+				 */
 
 				try {
 
@@ -742,9 +742,9 @@ public class employee {
 		txtid_emp.setBounds(121, 22, 1721, 22);
 		txtid_emp.setColumns(10);
 		panel_1.add(txtid_emp);
-		
+
 		/**
-		 *  L'option modification de donnee		
+		 * L'option modification de donnee
 		 */
 
 		JButton btnUpdate = new JButton("Modifier");
@@ -772,11 +772,10 @@ public class employee {
 				id_emp = txtid_emp.getText();
 
 				try {
-					
-					/**
-					 *  Controle de saisie sur les champs
-					 */
 
+					/**
+					 * Controle de saisie sur les champs
+					 */
 
 					final String NOM_REGEX = "^[A-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
 
@@ -878,50 +877,51 @@ public class employee {
 							&& BANCAIRE_PATTERN.matcher(Decrypt_Banque(compte_bancaire)).matches()
 							&& NUMID_PATTERN.matcher(numero_id).matches()
 							&& SALAIRE_PATTERN.matcher(Decrypt_Banque(salaire)).matches() && !poste.equals("")
-							&& !departement.equals("") && !lieu.equals("") && account.getAccountType().contains("RH")) {
+							&& !departement.equals("") && !lieu.equals("")) {
 
-						pst = con.prepareStatement(
-								"update rh_employee set civilite= ?,nom=?,prenom=?,age=?,telephone=?,adresse=?,email=?,license=?,compte_bancaire=?,numero_id=?,salaire=?,poste=?,departement=?,lieu=? where id_emp =?");
-						pst.setString(1, (String) civilite);
-						pst.setString(2, nom);
-						pst.setString(3, prenom);
-						pst.setString(4, age);
-						pst.setString(5, telephone);
-						pst.setString(6, adresse);
-						pst.setString(7, email);
-						pst.setString(8, license);
-						pst.setString(9, compte_bancaire);
-						pst.setString(10, numero_id);
-						pst.setString(11, salaire);
-						pst.setString(12, poste);
-						pst.setString(13, departement);
-						pst.setString(14, lieu);
-						pst.setString(15, id_emp);
-						pst.executeUpdate();
-						JOptionPane.showMessageDialog(null, "Record Updated!");
+						if (account.getAccountType().contains("RH")) {
+							pst = con.prepareStatement(
+									"update rh_employee set civilite= ?,nom=?,prenom=?,age=?,telephone=?,adresse=?,email=?,license=?,compte_bancaire=?,numero_id=?,salaire=?,poste=?,departement=?,lieu=? where id_emp =?");
+							pst.setString(1, (String) civilite);
+							pst.setString(2, nom);
+							pst.setString(3, prenom);
+							pst.setString(4, age);
+							pst.setString(5, telephone);
+							pst.setString(6, adresse);
+							pst.setString(7, email);
+							pst.setString(8, license);
+							pst.setString(9, compte_bancaire);
+							pst.setString(10, numero_id);
+							pst.setString(11, salaire);
+							pst.setString(12, poste);
+							pst.setString(13, departement);
+							pst.setString(14, lieu);
+							pst.setString(15, id_emp);
+							pst.executeUpdate();
+							JOptionPane.showMessageDialog(null, "Record Updated!");
 
-						table_load();
+							table_load();
 
-						dropcivil.setSelectedItem("");
-						txtnom.setText("");
-						txtprenom.setText("");
-						txtage.setText("");
-						txttelephone.setText("");
-						txtadresse.setText("");
-						txtemail.setText("");
-						droplicense.setSelectedItem("");
-						txtcompte_bancaire.setText("");
-						txtnumero_id.setText("");
-						txtsalaire.setText("");
-						dropposte.setSelectedItem("");
-						dropdept.setSelectedItem("");
-						droplieu.setSelectedItem("");
+							dropcivil.setSelectedItem("");
+							txtnom.setText("");
+							txtprenom.setText("");
+							txtage.setText("");
+							txttelephone.setText("");
+							txtadresse.setText("");
+							txtemail.setText("");
+							droplicense.setSelectedItem("");
+							txtcompte_bancaire.setText("");
+							txtnumero_id.setText("");
+							txtsalaire.setText("");
+							dropposte.setSelectedItem("");
+							dropdept.setSelectedItem("");
+							droplieu.setSelectedItem("");
 
-						txtnom.requestFocus();
-					} else {
-						JOptionPane.showMessageDialog(null, "Vous n'avez pas les privileges !");
+							txtnom.requestFocus();
+						} else {
+							JOptionPane.showMessageDialog(null, "Vous n'avez pas les privileges !");
+						}
 					}
-
 				}
 
 				catch (SQLException e1) {
@@ -932,9 +932,9 @@ public class employee {
 		frame.getContentPane().add(btnUpdate);
 
 		/**
-		 *  L'Option Supprimer des donnees 
+		 * L'Option Supprimer des donnees
 		 */
-		
+
 		JButton btnDelete = new JButton("Supprimer");
 		btnDelete.setBounds(900, 917, 156, 50);
 		btnDelete.addActionListener(new ActionListener() {
