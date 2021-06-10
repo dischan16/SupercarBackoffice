@@ -1,0 +1,243 @@
+sam paul mercedes benz 0098123 noire 1200000 08/04/21
+popo titi audi a5 8871234 blanc 5000000 09/07/21
+tom  /n samuel /n toyota /n vitz /n/n 0912345 /n bleu /n 300000 /n 10/04/21
+kasim 
+ nina 
+ volswagen 
+ polo 
+ 3453329 
+ bleu 
+ 250000 
+ 11/02/21
+ Client :nano 
+ Vendeur : sara 
+ Marque : mitsubishi 
+ Model : lancer 
+ Moteur : 0097653 
+ Couleur : rouge 
+ Prix : 500000 
+ Date : 12/03/18
+ Client :rome 
+ Vendeur : bala 
+ Marque : ford 
+ Model : raptor 
+ Moteur : 129749 
+ Couleur : blanc 
+ Prix : 1200000 
+ Date : 11/02/15
+ Client :bolom 
+ Vendeur : simon 
+ Marque : ferrari 
+ Model : sport 
+ Moteur : 128764 
+ Couleur : rouge 
+ Prix : 2000000 
+ Date : 15/09/13 
+ Date Du Rapport : 10/04/21 14:40:40
+ Client :tony 
+ Vendeur : mamad 
+ Marque : BMW 
+ Model : x3 
+ Moteur : 1292648 
+ Couleur : Bleu 
+ Prix : 2000000 
+ Date : 02/09/15 
+ Date Du Rapport : 16/04/21 14:40:44
+ Client :khushveer 
+ Vendeur : toto 
+ Marque : mercedes 
+ Model : benzz 
+ Moteur : 190445 
+ Couleur : blan 
+ Prix : 12345 
+ Date : 02/09/21 
+ Date Du Rapport : 16/04/21 14:51:32
+ Client :33445 
+ Vendeur : sam 
+ Marque : bmw 
+ Model : dddf 
+ Moteur : 44444 
+ Couleur : frfffgg 
+ Prix : 55555 
+ Date : 09/02/21 
+ Date Du Rapport : 16/04/21 14:52:37
+ Client :errrttgtgg 
+ Vendeur : fffdfd 
+ Marque : fffff 
+ Model : ggggg 
+ Moteur : 44444 
+ Couleur : eeee 
+ Prix : 888 
+ Date : 09/09/21 
+ Date Du Rapport : 16/04/21 15:03:43
+ Client :323 
+ Vendeur : 323 
+ Marque : vfvfvd 
+ Model : fvdv 
+ Moteur : 3333 
+ Couleur : dfdf 
+ Prix : 33 
+ Date : 04/04/21 
+ Date Du Rapport : 16/04/21 15:15:21
+ Client :32323 
+ Vendeur : 2323 
+ Marque : 2323 
+ Model : 2323 
+ Moteur : 2323 
+ Couleur : 232 
+ Prix : 32323 
+ Date : 23232 
+ Date Du Rapport : 16/04/21 15:22:28
+ Client :4343 
+ Vendeur : 3434 
+ Marque : 3434 
+ Model : 3434 
+ Moteur : 3434 
+ Couleur : 3434 
+ Prix : 3434 
+ Date : 3434 
+ Date Du Rapport : 16/04/21 15:30:20
+ Client :2323 
+ Vendeur : 2323 
+ Marque : 2323 
+ Model : 2323 
+ Moteur : 233 
+ Couleur : 2323 
+ Prix : 233 
+ Date : 233 
+ Date Du Rapport : 16/04/21 15:32:19
+ Client :haashim 
+ Vendeur : haashim 
+ Marque : haashim 
+ Model : haashim 
+ Moteur : haashim 
+ Couleur : hasshim 
+ Prix : dsdsd 
+ Date : 12 
+ Date Du Rapport : 16/04/21 15:37:24
+ Client :ttit 
+ Vendeur : fggg 
+ Marque : tttt 
+ Model : ttttt 
+ Moteur : 1233 
+ Couleur : rtg 
+ Prix : 5566 
+ Date : tyi 
+ Date Du Rapport : 16/04/21 15:43:51
+ Client :hhdhdh 
+ Vendeur : fggg 
+ Marque : fffg 
+ Model : gggg 
+ Moteur : 123 
+ Couleur : fff 
+ Prix : 766 
+ Date : has 
+ Date Du Rapport : 16/04/21 15:45:30
+ Client :jjjjj 
+ Vendeur : fggg 
+ Marque : ttt 
+ Model : yyy 
+ Moteur : gmggk 
+ Couleur : ggg 
+ Prix : ggkgkgk 
+ Date : 877666 
+ Date Du Rapport : 16/04/21 15:47:50
+ Client :fvdfd 
+ Vendeur : ddgfgdfg 
+ Marque : fgfdg 
+ Model : 333 
+ Moteur : dfsfd 
+ Couleur : dfsf 
+ Prix : dsfs 
+ Date : sdfsfs 
+ Date Du Rapport : 16/04/21 15:59:25
+ Client :sdsdfs 
+ Vendeur : sdfsdf 
+ Marque : sdsdfd 
+ Model : dsdfs 
+ Moteur : 333333 
+ Couleur : sdfsdf 
+ Prix : fsdfs 
+ Date : 3333 
+ Date Du Rapport : 16/04/21 16:07:49
+ Client :dsfsdf 
+ Vendeur : dfdsfsd 
+ Marque : sfdfsf 
+ Model : sdfss 
+ Moteur : dfsfsdf 
+ Couleur : sdfsdsdf 
+ Prix : sdfsdfsd 
+ Date : fsdfsdfsd 
+ Date Du Rapport : 16/04/21 16:08:04
+ Client :toto 
+ Vendeur : popo 
+ Marque : bmw 
+ Model : wazaa 
+ Moteur : 234456 
+ Couleur : belge 
+ Prix : 1200000 
+ Date : 02/09/21 
+ Date Du Rapport : 26/04/21 15:29:16
+ Client :Popo 
+ Vendeur : Titi 
+ Marque : BMW 
+ Model : x5 
+ Moteur : 45667 
+ Couleur : Noire 
+ Prix : 500000 
+ Date : 2021/04/27 
+ Date Du Rapport : 27/04/21 16:06:06
+ Client :Popo 
+ Vendeur : Titi 
+ Marque : BMW 
+ Model : x4 
+ Moteur : 123444 
+ Couleur : Noire 
+ Prix : 500000 
+ Date : 2021/04/23 
+ Date Du Rapport : 27/04/21 16:11:09
+ Client :null 
+ Vendeur : null 
+ Marque : null 
+ Model : null 
+ Moteur : null 
+ Couleur : null 
+ Prix : null 
+ Date : null 
+ 
+ Client :null 
+ Vendeur : null 
+ Marque : null 
+ Model : null 
+ Moteur : null 
+ Couleur : null 
+ Prix : null 
+ Date : 2021/09/12 
+ 
+ Client :null 
+ Vendeur : null 
+ Marque : null 
+ Model : null 
+ Moteur : null 
+ Couleur : null 
+ Prix : null 
+ Date : 2021/09/03 
+ 
+ Client :Haashim Potyram 
+ Vendeur : Tom titi 
+ Marque : BMW 
+ Model : e46 
+ Moteur : 1234456 
+ Couleur : Bleue 
+ Prix : 500000 
+ Date : 2021/09/23 
+ Date Du Rapport : 04/05/21 10:12:16
+ Client :Porto Jimy 
+ Vendeur : Kimmel Sam 
+ Marque : volswagen 
+ Model : classic 
+ Moteur : 098345678 
+ Couleur : Blanche 
+ Prix : GiTt0wKmiYI= 
+ Date : 2021-05-21 
+ Date Du Rapport : 21/05/21 17:31:40
