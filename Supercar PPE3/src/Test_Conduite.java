@@ -376,7 +376,7 @@ public class Test_Conduite {
 						pst.setString(7, date);
 						pst.setString(8, etat);
 						pst.executeUpdate();
-						JOptionPane.showMessageDialog(null, "Record Added!");
+						JOptionPane.showMessageDialog(null, "Test de conduite Ajouter!");
 						count_load();
 						table_load();
 
@@ -618,7 +618,7 @@ public class Test_Conduite {
 					pst.setString(8, etat);
 					pst.setString(9, id_test);
 					pst.executeUpdate();
-					JOptionPane.showMessageDialog(null, "Record Updated!");
+					JOptionPane.showMessageDialog(null, "Test de conduite Modifier!");
 					table_load();
 
 					dropcivil.setSelectedItem("");
@@ -659,7 +659,7 @@ public class Test_Conduite {
 
 					pst.setString(1, id_test);
 					pst.executeUpdate();
-					JOptionPane.showMessageDialog(null, "Record Deleted!");
+					JOptionPane.showMessageDialog(null, "Test de conduite Supprimer!");
 					count_load();
 					table_load();
 

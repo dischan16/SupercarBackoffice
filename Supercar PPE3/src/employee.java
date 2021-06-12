@@ -500,7 +500,7 @@ public class employee {
 					}
 
 					if (AGE_PATTERN.matcher(age).matches() == false || age.equals("")) {
-						JOptionPane.showMessageDialog(null, "L`insertion du age n`est pas bon");
+						JOptionPane.showMessageDialog(null, "L`insertion de l'age n`est pas bonne");
 					}
 
 					if (TELEPHONE_PATTERN.matcher(telephone).matches() == false) {
@@ -555,48 +555,48 @@ public class employee {
 							&& BANCAIRE_PATTERN.matcher(Decrypt_Banque(compte_bancaire)).matches()
 							&& NUMID_PATTERN.matcher(numero_id).matches()
 							&& SALAIRE_PATTERN.matcher(Decrypt_Banque(salaire)).matches() && !poste.equals("")
-							&& !departement.equals("") && !lieu.equals("")) {
+							&& !departement.equals("") && !lieu.equals("")
+							&& (account.getAccountType().contains("RH"))) {
 
-						if (account.getAccountType().contains("RH")) {
-							pst = con.prepareStatement(
-									"insert into rh_employee(civilite,nom,prenom,age,telephone,adresse,email,license,compte_bancaire,numero_id,salaire,poste,departement,lieu) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-							pst.setString(1, civilite);
-							pst.setString(2, nom);
-							pst.setString(3, prenom);
-							pst.setString(4, age);
-							pst.setString(5, telephone);
-							pst.setString(6, adresse);
-							pst.setString(7, email);
-							pst.setString(8, license);
-							pst.setString(9, compte_bancaire);
-							pst.setString(10, numero_id);
-							pst.setString(11, salaire);
-							pst.setString(12, poste);
-							pst.setString(13, departement);
-							pst.setString(14, lieu);
-							pst.executeUpdate();
-							JOptionPane.showMessageDialog(null, "Record Added!");
-							count_load();
-							table_load();
+						pst = con.prepareStatement(
+								"insert into rh_employee(civilite,nom,prenom,age,telephone,adresse,email,license,compte_bancaire,numero_id,salaire,poste,departement,lieu) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+						pst.setString(1, civilite);
+						pst.setString(2, nom);
+						pst.setString(3, prenom);
+						pst.setString(4, age);
+						pst.setString(5, telephone);
+						pst.setString(6, adresse);
+						pst.setString(7, email);
+						pst.setString(8, license);
+						pst.setString(9, compte_bancaire);
+						pst.setString(10, numero_id);
+						pst.setString(11, salaire);
+						pst.setString(12, poste);
+						pst.setString(13, departement);
+						pst.setString(14, lieu);
+						pst.executeUpdate();
+						JOptionPane.showMessageDialog(null, "Employée Ajouter!"); 
+						count_load();
+						table_load();
 
-							dropcivil.setSelectedItem("");
-							txtnom.setText("");
-							txtprenom.setText("");
-							txtage.setText("");
-							txttelephone.setText("");
-							txtadresse.setText("");
-							txtemail.setText("");
-							droplicense.setSelectedItem("");
-							txtcompte_bancaire.setText("");
-							txtnumero_id.setText("");
-							txtsalaire.setText("");
-							dropposte.setSelectedItem("");
-							dropdept.setSelectedItem("");
-							droplieu.setSelectedItem("");
-							txtnom.requestFocus();
-						} else {
-							JOptionPane.showMessageDialog(null, "Vous n'avez pas les privileges !");
-						}
+						dropcivil.setSelectedItem("");
+						txtnom.setText("");
+						txtprenom.setText("");
+						txtage.setText("");
+						txttelephone.setText("");
+						txtadresse.setText("");
+						txtemail.setText("");
+						droplicense.setSelectedItem("");
+						txtcompte_bancaire.setText("");
+						txtnumero_id.setText("");
+						txtsalaire.setText("");
+						dropposte.setSelectedItem("");
+						dropdept.setSelectedItem("");
+						droplieu.setSelectedItem("");
+						txtnom.requestFocus();
+					} else {
+						JOptionPane.showMessageDialog(null,
+								"Vous n'avez pas les privileges et/ou vous avez une erreur de saisie");
 					}
 				}
 
@@ -898,7 +898,7 @@ public class employee {
 							pst.setString(14, lieu);
 							pst.setString(15, id_emp);
 							pst.executeUpdate();
-							JOptionPane.showMessageDialog(null, "Record Updated!");
+							JOptionPane.showMessageDialog(null, "Employée Modifier!");
 
 							table_load();
 
@@ -951,7 +951,7 @@ public class employee {
 
 						pst.setString(1, id_emp);
 						pst.executeUpdate();
-						JOptionPane.showMessageDialog(null, "Record Deleted!");
+						JOptionPane.showMessageDialog(null, "Employée Supprimer!");
 						count_load();
 						table_load();
 

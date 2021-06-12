@@ -181,7 +181,7 @@ public class departement {
 					pst.setString(1, nom_dept);
 					pst.setString(2, adresse_dept);
 					pst.executeUpdate();
-					JOptionPane.showMessageDialog(null, "Record Added!");
+					JOptionPane.showMessageDialog(null, "Departement Ajouter!");
 					table_load();
 					
 						           
@@ -316,7 +316,7 @@ public class departement {
 			            pst.setString(2,  adresse_dept);
 			            pst.setString(3, id_dept);
 			            pst.executeUpdate();
-			            JOptionPane.showMessageDialog(null, "Record Updated!");
+			            JOptionPane.showMessageDialog(null, "Departement Modifier!");
 			            table_load();
 			           
 			            dropnom.setSelectedItem("");
@@ -352,7 +352,7 @@ public class departement {
 			
 		            pst.setString(1, id_dept);
 		            pst.executeUpdate();
-		            JOptionPane.showMessageDialog(null, "Record Deleted!");
+		            JOptionPane.showMessageDialog(null, "Departement Supprimer!");
 		            table_load();
 		         
 

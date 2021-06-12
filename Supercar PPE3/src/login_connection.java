@@ -280,15 +280,30 @@ public class login_connection {
 			frame.getContentPane().add(btnDepartement);
 			
 			JButton btnChiffreDaffaire = new JButton("Chiffre D'affaire");
+			btnChiffreDaffaire.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					login_connection.this.frame.setVisible(false);
+					chiffre_affaire.main(login);
+				}
+			});
 			btnChiffreDaffaire.setFont(new Font("Dialog", Font.BOLD, 16));
 			btnChiffreDaffaire.setBounds(407, 428, 217, 86);
 			frame.getContentPane().add(btnChiffreDaffaire);
 			
 			JButton btncommission = new JButton("Commission");
+			btncommission.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					login_connection.this.frame.setVisible(false);
+					commission.main(login);
+				}
+			});
 			btncommission.setFont(new Font("Dialog", Font.BOLD, 16));
 			btncommission.setBounds(407, 550, 217, 86);
 			frame.getContentPane().add(btncommission);
+			
 	}
+		
+		
 		
 		/**
 		 *  Privilege Admin
