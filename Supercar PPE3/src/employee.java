@@ -964,7 +964,7 @@ public class employee {
 						txtcompte_bancaire.setText("");
 						txtnumero_id.setText("");
 						txtsalaire.setText("");
-
+  
 						txtnom.requestFocus();
 					} else {
 						JOptionPane.showMessageDialog(null, "Vous n'avez pas les privileges !");

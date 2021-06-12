@@ -209,7 +209,7 @@ public class chiffre_affaire {
 		JLabel lblLeChiffreDaffaire = new JLabel("Le chiffre d'affaires est : ");
 		lblLeChiffreDaffaire.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLeChiffreDaffaire.setBounds(110, 273, 216, 16);
-		panel.add(lblLeChiffreDaffaire);
+		panel.add(lblLeChiffreDaffaire);  
 		
 		JButton btnSortir = new JButton("Sortir");
 		btnSortir.addActionListener(new ActionListener() {

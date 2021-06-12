@@ -631,7 +631,7 @@ public class Test_Conduite {
 					dropetat.setSelectedItem("");
 
 					txtnom.requestFocus();
-				
+				    
 				
 					}
 					

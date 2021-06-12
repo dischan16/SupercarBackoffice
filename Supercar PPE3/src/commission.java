@@ -75,7 +75,7 @@ public class commission {
 		    table.setModel(DbUtils.resultSetToTableModel(rs));
 		} 
 	    	catch (SQLException e) 
-	    	 {
+	    	 { 
 	    		e.printStackTrace();
 		  } 
 	    }

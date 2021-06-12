@@ -283,7 +283,7 @@ public class login_connection {
 			btnChiffreDaffaire.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					login_connection.this.frame.setVisible(false);
-					chiffre_affaire.main(login);
+					chiffre_affaire.main(login);  
 				}
 			});
 			btnChiffreDaffaire.setFont(new Font("Dialog", Font.BOLD, 16));
