@@ -954,7 +954,7 @@ public class employee {
 						JOptionPane.showMessageDialog(null, "Employée Supprimer!");
 						count_load();
 						table_load();
-
+ 
 						txtnom.setText("");
 						txtprenom.setText("");
 						txtage.setText("");

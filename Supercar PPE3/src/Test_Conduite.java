@@ -623,7 +623,7 @@ public class Test_Conduite {
 
 					dropcivil.setSelectedItem("");
 					txtnom.setText("");
-					txtprenom.setText("");
+					txtprenom.setText(""); 
 					txttelephone.setText("");
 					txtemail.setText("");
 					dropvoiture.setSelectedItem("");

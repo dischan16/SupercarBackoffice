@@ -273,7 +273,7 @@ public class login_connection {
 				public void actionPerformed(ActionEvent e) {
 					login_connection.this.frame.setVisible(false);
 					departement.main(login);
-				}
+				} 
 			});
 			btnDepartement.setFont(new Font("Dialog", Font.BOLD, 16));
 			btnDepartement.setBounds(407, 307, 217, 86);

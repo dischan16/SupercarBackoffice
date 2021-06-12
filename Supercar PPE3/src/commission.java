@@ -67,7 +67,7 @@ public class commission {
 	 //Le SQL pour l'affichage sur la table et le calcul pour avoir le commission total.(SUM)
 	 
 	  public void table_load()
-	    {
+	    { 
 	    	try 
 	    	{
 		    pst = con.prepareStatement("SELECT CONCAT(rh_employee.prenom,' ', rh_employee.nom) as Nom, SUM(quantite) as Quantite_com, SUM(quantite) * 3500 as Total FROM vendeur_commande, rh_employee WHERE vendeur_commande.id_emp=rh_employee.id_emp AND statue='Termine' AND MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE()) GROUP BY rh_employee.id_emp");

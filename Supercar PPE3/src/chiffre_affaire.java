@@ -193,7 +193,7 @@ public class chiffre_affaire {
 		comboBox.addItem("jour");
 		comboBox.addItem("mois");
 		comboBox.addItem("annee");
-		
+		 
 		//Insertion des donnees.
 
 		JLabel lblEntrezUneDate = new JLabel("Entrez une date (aaaa-mm-jj)");

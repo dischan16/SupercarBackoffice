@@ -337,7 +337,7 @@ public class departement {
 		// L'Option Supprimer des donnees 
 		
 		JButton btnDelete = new JButton("Supprimer");
-		btnDelete.setBounds(353, 645, 107, 50);
+		btnDelete.setBounds(353, 645, 107, 50); 
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
